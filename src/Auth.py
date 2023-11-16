@@ -10,13 +10,10 @@ def hash_password(password):
 def authenticateUser(user, password):
     user_lower = user.lower()
     users_profiles = read_from_xlsx('passwords.xlsx')
-    print('user_lower', user_lower)
-    print('users_profiles', users_profiles)
 
     if user_lower in users_profiles:
         stored_hash = users_profiles[user_lower]
         if bcrypt.checkpw(password.encode('utf-8'), stored_hash):
-            print(f'Parabens, voce entrou {user_lower}')
             return True
         else:
             print('Senha incorreta')
@@ -47,4 +44,3 @@ hashed_passwords = {
 
 write_to_xlsx('passwords.xlsx', hashed_passwords)
 users_options = read_from_xlsx('passwords.xlsx')
-# print(users_options)
