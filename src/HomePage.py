@@ -42,9 +42,11 @@ class HomePage(tk.Tk):
     def show_page(self, page_name):
         if page_name in self.pages:
             page = self.pages[page_name]()
-            self.main_content.destroy()
-            self.main_content = page
-            self.main_content.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+            if isinstance(page, tk.Frame):
+                if self.main_content:
+                    self.main_content.destroy()
+                self.main_content = page
+                self.main_content.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
 
 class InicioPage(tk.Frame):
