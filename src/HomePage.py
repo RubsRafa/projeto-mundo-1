@@ -7,7 +7,7 @@ class HomePage(tk.Tk):
         self.title('HOME PAGE')
         self.geometry('800x600')
 
-        self.bar = tk.Frame(self, bg='#535353', width=200)
+        self.bar = tk.Frame(self, bg='#505050', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
 
         options = ['Início', 'Sistemas', 'Perfis de Acesso', 'Matriz SoD']
@@ -15,7 +15,7 @@ class HomePage(tk.Tk):
             self.btn = tk.Button(self.bar, text=item, command=lambda text=item: self.show_button(text), foreground='gray', bg='black', activebackground='gray', activeforeground='white', font=('Roboto', 14), borderwidth=0)
             self.btn.pack(pady=10, padx=10)
 
-        self.main_content = tk.Frame(self, bg='red')
+        self.main_content = tk.Frame(self, bg='black')
         self.main_content.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
         self.pages = {
@@ -57,7 +57,7 @@ class InicioPage(tk.Frame):
             "Início\n"
             "Adicionar mais texto"
         )
-        self.color = 'red'
+        self.color = '#272727'
 
         self.configure(bg=self.color)
         label = tk.Label(self, text=self.content, font=('Roboto', 14), foreground='white', bg='gray')
