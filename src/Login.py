@@ -36,7 +36,9 @@ class Login():
         verifyUser = Auth.authenticateUser(self.login_entry.get(), self.password_entry.get())
         if verifyUser == True:
             print('Abrir página principal')
+            self.login_window.destroy()
             open_home_page = Home.HomePage()
+            open_home_page.mainloop()
         else:
             CTkMessagebox(title='Erro ao fazer o login', message='Usuário ou senha incorretos', icon='cancel', width=280)
 
@@ -45,3 +47,4 @@ class Login():
 
 if __name__ == '__main__':
     app = Login()
+    app.login_window.mainloop()
