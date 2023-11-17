@@ -89,8 +89,8 @@ class SistemasPage(tk.Frame):
         self.setup_entry(self.code_entry, self.code_placeholder)
         self.setup_entry(self.name_entry, self.name_placeholder)
 
-        add_button = tk.Button(self, text='Adicionar', command=self.adicionar_sistema)
-        remove_button = tk.Button(self, text='Remover', command=self.remover_sistema)
+        add_button = tk.Button(self, text='Adicionar', command=self.add_system)
+        remove_button = tk.Button(self, text='Remover', command=self.remove_system)
 
         self.code_entry.pack(pady=10)
         self.name_entry.pack(pady=10)
@@ -103,7 +103,7 @@ class SistemasPage(tk.Frame):
         entry.bind("<FocusIn>", lambda event, entry=entry, placeholder=placeholder: entry_focus_in(event, entry, placeholder))
         entry.bind("<FocusOut>", lambda event, entry=entry, placeholder=placeholder: entry_focus_out(event, entry, placeholder))
 
-    def adicionar_sistema(self):
+    def add_system(self):
         codigo = self.code_entry.get()
         nome = self.name_entry.get()
 
@@ -112,7 +112,7 @@ class SistemasPage(tk.Frame):
             self.code_entry.delete(0, 'end')
             self.name_entry.delete(0, 'end')
 
-    def remover_sistema(self):
+    def remove_system(self):
         selected_item = self.tree.selection()
 
         if selected_item:
@@ -139,16 +139,16 @@ class PerfisPage(tk.Frame):
         self.name_entry = tk.Entry(self)
         self.description_entry = tk.Entry(self)
 
-        self.code_placeholder = 'Código do Sistema'
-        self.name_placeholder = 'Nome do Sistema'
-        self.description_placeholder = 'Descrição'
+        self.code_placeholder = 'Insira o Código do Sistema'
+        self.name_placeholder = 'Insira o Nome do Sistema'
+        self.description_placeholder = 'Insira a Descrição'
 
         self.setup_entry(self.code_entry, self.code_placeholder)
         self.setup_entry(self.name_entry, self.name_placeholder)
         self.setup_entry(self.description_entry, self.description_placeholder)
 
-        add_button = tk.Button(self, text='Adicionar', command=self.adicionar_sistema)
-        remove_button = tk.Button(self, text='Remover', command=self.remover_sistema)
+        add_button = tk.Button(self, text='Adicionar', command=self.add_system)
+        remove_button = tk.Button(self, text='Remover', command=self.remove_system)
 
         self.code_entry.pack(pady=10)
         self.name_entry.pack(pady=10)
@@ -162,7 +162,7 @@ class PerfisPage(tk.Frame):
         entry.bind("<FocusIn>", lambda event, entry=entry, placeholder=placeholder: entry_focus_in(event, entry, placeholder))
         entry.bind("<FocusOut>", lambda event, entry=entry, placeholder=placeholder: entry_focus_out(event, entry, placeholder))
 
-    def adicionar_sistema(self):
+    def add_system(self):
         code = self.code_entry.get()
         name = self.name_entry.get()
         description = self.description_entry.get()
@@ -176,7 +176,7 @@ class PerfisPage(tk.Frame):
             self.name_entry.insert(0, self.name_placeholder)
             self.description_entry.insert(0, self.description_placeholder)
 
-    def remover_sistema(self):
+    def remove_system(self):
         selected_item = self.tree.selection()
 
         if selected_item:
