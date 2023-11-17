@@ -83,6 +83,12 @@ class SistemasPage(tk.Frame):
         self.code_entry = tk.Entry(self)
         self.name_entry = tk.Entry(self)
 
+        self.code_placeholder = 'Insira o Código do Sistema'
+        self.name_placeholder = 'Insira o Nome do Sistema'
+
+        self.setup_entry(self.code_entry, self.code_placeholder)
+        self.setup_entry(self.name_entry, self.name_placeholder)
+
         add_button = tk.Button(self, text='Adicionar', command=self.adicionar_sistema)
         remove_button = tk.Button(self, text='Remover', command=self.remover_sistema)
 
@@ -90,6 +96,12 @@ class SistemasPage(tk.Frame):
         self.name_entry.pack(pady=10)
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
+    
+    def setup_entry(self, entry, placeholder):
+        entry.insert(0, placeholder)
+        entry.configure(fg='grey')
+        entry.bind("<FocusIn>", lambda event, entry=entry, placeholder=placeholder: entry_focus_in(event, entry, placeholder))
+        entry.bind("<FocusOut>", lambda event, entry=entry, placeholder=placeholder: entry_focus_out(event, entry, placeholder))
 
     def adicionar_sistema(self):
         codigo = self.code_entry.get()
@@ -130,9 +142,6 @@ class PerfisPage(tk.Frame):
         self.code_placeholder = 'Código do Sistema'
         self.name_placeholder = 'Nome do Sistema'
         self.description_placeholder = 'Descrição'
-        # self.code_entry.insert(0, self.code_placeholder)
-        # self.name_entry.insert(0, self.name_placeholder)
-        # self.description_entry.insert(0, self.description_placeholder)
 
         self.setup_entry(self.code_entry, self.code_placeholder)
         self.setup_entry(self.name_entry, self.name_placeholder)
