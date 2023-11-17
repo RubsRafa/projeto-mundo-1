@@ -143,7 +143,7 @@ class SistemasPage(tk.Frame):
                 self.write_to_xlsx_systems(data)
                 self.tree.delete(selected_item)
             else:
-                tkMessageBox.showerror('NOT FOUND.', f'Esse código {code} não foi\nencontrado no arquivo.')
+                tkMessageBox.showerror('NOT FOUND.', f'Esse código não foi\nencontrado no arquivo.')
     
     def load_data(self):
         if not os.path.exists(self.filename):
@@ -170,14 +170,14 @@ class SistemasPage(tk.Frame):
 class PerfisPage(tk.Frame):
     def __init__(self):
         super().__init__()
-
+        self.filename = 'profiles.xlsx'
         self.create_widgets()
 
     def create_widgets(self):
-        columns = ('Código do Sistema', 'Nome do Sistema', 'Descrição')
-        self.tree = ttk.Treeview(self, columns=columns, show='headings', height=10)
+        self.columns = ('Código do Sistema', 'Nome do Sistema', 'Descrição')
+        self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
 
-        for col in columns:
+        for col in self.columns:
             self.tree.heading(col, text=col)
             self.tree.column(col, width=150)
 
@@ -195,8 +195,8 @@ class PerfisPage(tk.Frame):
         Focus.setup_entry(self.name_entry, self.name_placeholder)
         Focus.setup_entry(self.description_entry, self.description_placeholder)
 
-        add_button = tk.Button(self, text='Adicionar', command=self.add_system)
-        remove_button = tk.Button(self, text='Remover', command=self.remove_system)
+        add_button = tk.Button(self, text='Adicionar', command=self.add_profile)
+        remove_button = tk.Button(self, text='Remover', command=self.remove_profile)
 
         self.code_entry.pack(pady=10)
         self.name_entry.pack(pady=10)
@@ -204,42 +204,81 @@ class PerfisPage(tk.Frame):
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
 
-    def add_system(self):
+        self.load_data()
+
+    def add_profile(self):
         code = self.code_entry.get()
         name = self.name_entry.get()
         description = self.description_entry.get()
+        data = self.read_from_xlsx_systems()
+        try:
+            int(code)
+        except:
+            tkMessageBox.showerror('INVALID DATA', 'O código deve ser um número')
 
-        if code and name and description:
-            self.tree.insert('', 'end', values=(code, name, description))
-            self.code_entry.delete(0, 'end')
-            self.name_entry.delete(0, 'end')
-            self.description_entry.delete(0, 'end')
-            if code == self.code_placeholder:
-                self.code_entry.insert(0, self.code_placeholder)
-                self.code_entry.configure(fg='grey')
+        if int(code) not in data:
+            tkMessageBox.showerror('UNAUTHORIZED', 'O código inserido não existe.\nO sistema não existe')
+        else:
+            data[int(code)] = (name, description)
             if name == self.name_placeholder:
-                self.name_entry.insert(0, self.name_placeholder)
-                self.name_entry.configure(fg='grey')
+                tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\num nome existente\npara o sistema.')
             if description == self.description_placeholder:
-                self.description_entry.insert(0, self.description_placeholder)
-                self.description_entry.configure(fg='grey')
+                tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\numa descrição\npara o sistema.')
+            self.write_to_xlsx_profiles(data)
 
-    def remove_system(self):
+            if code and name and description:
+                self.tree.insert('', 'end', values=(code, name, description))
+                self.code_entry.delete(0, 'end')
+                self.name_entry.delete(0, 'end')
+                self.description_entry.delete(0, 'end')
+                if code == self.code_placeholder:
+                    self.code_entry.insert(0, self.code_placeholder)
+                    self.code_entry.configure(fg='grey')
+                if name == self.name_placeholder:
+                    self.name_entry.insert(0, self.name_placeholder)
+                    self.name_entry.configure(fg='grey')
+                if description == self.description_placeholder:
+                    self.description_entry.insert(0, self.description_placeholder)
+                    self.description_entry.configure(fg='grey')
+
+    def remove_profile(self):
         selected_item = self.tree.selection()
 
         if selected_item:
-            self.tree.delete(selected_item)
+            code = str(self.tree.item(selected_item, 'values')[0])
+            data = self.read_from_xlsx_profiles()
 
+            if int(code) in data:
+                del data[int(code)]
+                self.write_to_xlsx_profiles(data)
+                self.tree.delete(selected_item)
+            else:
+                tkMessageBox.showerror('NOT FOUND', 'Esse cadastro não foi\nencontrado no arquivo.')
 
+    def load_data(self):
+        if not os.path.exists(self.filename):
+            self.write_to_xlsx_profiles({})
 
-def write_to_xlsx_profiles(filename, data):
-    df = pd.DataFrame(list(data.items()), columns=['Código', 'Sistema'])
-    df.to_excel(filename, index=False)
+        data = self.read_from_xlsx_profiles()
+        for code, name, description in data.items():
+            self.tree.insert('', 'end', values=(code, name, description))
 
-def read_from_xlsx_profiles(filename):
-    df = pd.read_excel(filename)
-    data = {row['Código']: row['Sistema'] for _, row in df.iterrows()}
-    return data
+    def read_from_xlsx_systems(self):
+        try:
+            df = pd.read_excel('systems.xlsx', engine='openpyxl')
+            data = {row['Código do Sistema']: (row['Nome do Sistema']) for _, row in df.iterrows()}
+            return data
+        except pd.errors.EmptyDataError:
+            return {}
+            
+    def write_to_xlsx_profiles(self, data):
+        df = pd.DataFrame(list(data.items()), columns=self.columns)
+        df.to_excel(self.filename, index=False)
+
+    def read_from_xlsx_profiles(self):
+        df = pd.read_excel(self.filename)
+        data = {row['Código do Sistema']: (row['Nome do Sistema'], row['Descrição']) for _, row in df.iterrows()}
+        return data
 
 
 if __name__ == "__main__":
