@@ -1,5 +1,7 @@
 import tkinter as tk
 from tkinter import ttk
+import pandas as pd
+import EntryFocus as Focus
 
 class HomePage(tk.Tk):
     def __init__(self):
@@ -86,8 +88,8 @@ class SistemasPage(tk.Frame):
         self.code_placeholder = 'Insira o Código do Sistema'
         self.name_placeholder = 'Insira o Nome do Sistema'
 
-        self.setup_entry(self.code_entry, self.code_placeholder)
-        self.setup_entry(self.name_entry, self.name_placeholder)
+        Focus.setup_entry(self.code_entry, self.code_placeholder)
+        Focus.setup_entry(self.name_entry, self.name_placeholder)
 
         add_button = tk.Button(self, text='Adicionar', command=self.add_system)
         remove_button = tk.Button(self, text='Remover', command=self.remove_system)
@@ -97,11 +99,6 @@ class SistemasPage(tk.Frame):
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
     
-    def setup_entry(self, entry, placeholder):
-        entry.insert(0, placeholder)
-        entry.configure(fg='grey')
-        entry.bind("<FocusIn>", lambda event, entry=entry, placeholder=placeholder: entry_focus_in(event, entry, placeholder))
-        entry.bind("<FocusOut>", lambda event, entry=entry, placeholder=placeholder: entry_focus_out(event, entry, placeholder))
 
     def add_system(self):
         code = self.code_entry.get()
@@ -149,9 +146,9 @@ class PerfisPage(tk.Frame):
         self.name_placeholder = 'Insira o Nome do Sistema'
         self.description_placeholder = 'Insira a Descrição'
 
-        self.setup_entry(self.code_entry, self.code_placeholder)
-        self.setup_entry(self.name_entry, self.name_placeholder)
-        self.setup_entry(self.description_entry, self.description_placeholder)
+        Focus.setup_entry(self.code_entry, self.code_placeholder)
+        Focus.setup_entry(self.name_entry, self.name_placeholder)
+        Focus.setup_entry(self.description_entry, self.description_placeholder)
 
         add_button = tk.Button(self, text='Adicionar', command=self.add_system)
         remove_button = tk.Button(self, text='Remover', command=self.remove_system)
@@ -195,15 +192,24 @@ class PerfisPage(tk.Frame):
             self.tree.delete(selected_item)
 
 
-def entry_focus_in(event, entry, placeholder):
-    if entry.get() == placeholder:
-        entry.delete(0, 'end')
-        entry.configure(fg='black')
 
-def entry_focus_out(event, entry, placeholder):
-    if not entry.get():
-        entry.insert(0, placeholder)
-        entry.configure(fg='grey')
+def write_to_xlsx_profiles(filename, data):
+    df = pd.DataFrame(list(data.items()), columns=['Código', 'Sistema'])
+    df.to_excel(filename, index=False)
+
+def read_from_xlsx_profiles(filename):
+    df = pd.read_excel(filename)
+    data = {row['Código']: row['Sistema'] for _, row in df.iterrows()}
+    return data
+
+def write_to_xlsx_systems(filename, data):
+    df = pd.DataFrame(list(data.items()), columns=['Código', 'Sistema', 'Descrição'])
+    df.to_excel(filename, index=False)
+
+def read_from_xlsx_systems(filename):
+    df = pd.read_excel(filename)
+    data = {row['Código']: row['Sistema'] for _, row in df.iterrows()}
+    return data
 
 
 if __name__ == "__main__":
