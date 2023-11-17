@@ -104,13 +104,19 @@ class SistemasPage(tk.Frame):
         entry.bind("<FocusOut>", lambda event, entry=entry, placeholder=placeholder: entry_focus_out(event, entry, placeholder))
 
     def add_system(self):
-        codigo = self.code_entry.get()
-        nome = self.name_entry.get()
+        code = self.code_entry.get()
+        name = self.name_entry.get()
 
-        if codigo and nome:
-            self.tree.insert('', 'end', values=(codigo, nome))
+        if code and name:
+            self.tree.insert('', 'end', values=(code, name))
             self.code_entry.delete(0, 'end')
             self.name_entry.delete(0, 'end')
+            if code == self.code_placeholder:
+                self.code_entry.insert(0, self.code_placeholder)
+                self.code_entry.configure(fg='grey')
+            if name == self.name_placeholder:
+                self.name_entry.insert(0, self.name_placeholder)
+                self.name_entry.configure(fg='grey')
 
     def remove_system(self):
         selected_item = self.tree.selection()
@@ -172,9 +178,15 @@ class PerfisPage(tk.Frame):
             self.code_entry.delete(0, 'end')
             self.name_entry.delete(0, 'end')
             self.description_entry.delete(0, 'end')
-            self.code_entry.insert(0, self.code_placeholder)
-            self.name_entry.insert(0, self.name_placeholder)
-            self.description_entry.insert(0, self.description_placeholder)
+            if code == self.code_placeholder:
+                self.code_entry.insert(0, self.code_placeholder)
+                self.code_entry.configure(fg='grey')
+            if name == self.name_placeholder:
+                self.name_entry.insert(0, self.name_placeholder)
+                self.name_entry.configure(fg='grey')
+            if description == self.description_placeholder:
+                self.description_entry.insert(0, self.description_placeholder)
+                self.description_entry.configure(fg='grey')
 
     def remove_system(self):
         selected_item = self.tree.selection()
