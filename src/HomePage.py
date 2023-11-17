@@ -175,7 +175,7 @@ class PerfisPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.columns = ('Código do Sistema', 'Nome do Sistema', 'Descrição')
+        self.columns = ('Código do Sistema', 'Nome do Perfil', 'Descrição')
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
 
         for col in self.columns:
@@ -189,7 +189,7 @@ class PerfisPage(tk.Frame):
         self.description_entry = tk.Entry(self, width=30)
 
         self.code_placeholder = 'Insira o Código do Sistema'
-        self.name_placeholder = 'Insira o Nome do Sistema'
+        self.name_placeholder = 'Insira o Nome do Perfil'
         self.description_placeholder = 'Insira a Descrição'
 
         Focus.setup_entry(self.code_entry, self.code_placeholder)
@@ -211,44 +211,49 @@ class PerfisPage(tk.Frame):
         code = self.code_entry.get()
         name = self.name_entry.get()
         description = self.description_entry.get()
-        data = self.read_from_xlsx_systems()
+        systems = self.read_from_xlsx_systems()
+        data = self.read_from_xlsx_profiles()
         try:
             int(code)
         except:
             tkMessageBox.showerror('INVALID DATA', 'O código deve ser um número')
 
-        if int(code) not in data:
-            tkMessageBox.showerror('UNAUTHORIZED', 'O código inserido não existe.\nO sistema não existe')
+        if int(code) not in systems:
+            tkMessageBox.showerror('UNAUTHORIZED', 'O código do sistema\ninserido não existe.\nInsira código de\nsistema existente.')
         else:
-            data[int(code)] = (name, description)
-            if name == self.name_placeholder:
-                tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\num nome existente\npara o sistema.')
-            if description == self.description_placeholder:
-                tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\numa descrição\npara o sistema.')
-            self.write_to_xlsx_profiles(data)
+            if name == self.name_placeholder or name == '':
+                tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\num nome\npara o perfil.')
+            elif description == self.description_placeholder or description == '':
+                tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\numa descrição\npara o perfil.')
+            else: 
+                data[int(code)] = {'Nome do Perfil': name, 'Descrição': description}
+                print(data)
+                self.write_to_xlsx_profiles(data)
 
-            if code and name and description:
-                self.tree.insert('', 'end', values=(code, name, description))
-                self.code_entry.delete(0, 'end')
-                self.name_entry.delete(0, 'end')
-                self.description_entry.delete(0, 'end')
-                if code == self.code_placeholder:
-                    self.code_entry.insert(0, self.code_placeholder)
-                    self.code_entry.configure(fg='grey')
-                if name == self.name_placeholder:
-                    self.name_entry.insert(0, self.name_placeholder)
-                    self.name_entry.configure(fg='grey')
-                if description == self.description_placeholder:
-                    self.description_entry.insert(0, self.description_placeholder)
-                    self.description_entry.configure(fg='grey')
+                if code and name and description:
+                    values = (code, data[int(code)]['Nome do Perfil'], data[int(code)]['Descrição'])
+                    self.tree.insert('', 'end', values=values)
+                    self.code_entry.delete(0, 'end')
+                    self.name_entry.delete(0, 'end')
+                    self.description_entry.delete(0, 'end')
+                    if code == self.code_placeholder:
+                        self.code_entry.insert(0, self.code_placeholder)
+                        self.code_entry.configure(fg='grey')
+                    if name == self.name_placeholder:
+                        self.name_entry.insert(0, self.name_placeholder)
+                        self.name_entry.configure(fg='grey')
+                    if description == self.description_placeholder:
+                        self.description_entry.insert(0, self.description_placeholder)
+                        self.description_entry.configure(fg='grey')
 
     def remove_profile(self):
         selected_item = self.tree.selection()
 
         if selected_item:
             code = str(self.tree.item(selected_item, 'values')[0])
+            print(code)
             data = self.read_from_xlsx_profiles()
-
+            print(data)
             if int(code) in data:
                 del data[int(code)]
                 self.write_to_xlsx_profiles(data)
@@ -265,6 +270,7 @@ class PerfisPage(tk.Frame):
             self.tree.insert('', 'end', values=(code, name, description))
 
     def read_from_xlsx_systems(self):
+        print('read systems')
         try:
             df = pd.read_excel('systems.xlsx', engine='openpyxl')
             data = {row['Código do Sistema']: (row['Nome do Sistema']) for _, row in df.iterrows()}
@@ -273,13 +279,18 @@ class PerfisPage(tk.Frame):
             return {}
             
     def write_to_xlsx_profiles(self, data):
-        df = pd.DataFrame(list(data.items()), columns=self.columns)
+        print('write profile', data)
+        df = pd.DataFrame(list(data.items()), columns=self.columns[:2])
         df.to_excel(self.filename, index=False)
 
     def read_from_xlsx_profiles(self):
-        df = pd.read_excel(self.filename)
-        data = {row['Código do Sistema']: (row['Nome do Sistema'], row['Descrição']) for _, row in df.iterrows()}
-        return data
+        print('read profile')
+        try:
+            df = pd.read_excel(self.filename, engine='openpyxl')
+            data = {row['Código do Sistema']: {'Nome do Perfil': row['Nome do Perfil'], 'Descrição': row['Descrição']} for _, row in df.iterrows()}
+            return data
+        except pd.errors.EmptyDataError:
+            return {}
 
 
 if __name__ == "__main__":
