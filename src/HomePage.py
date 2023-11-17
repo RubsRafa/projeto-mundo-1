@@ -119,17 +119,18 @@ class SistemasPage(tk.Frame):
             data[int(code)] = name
             if name == self.name_placeholder:
                 tkMessageBox.showerror('INVALID DATA', 'Você deve inserir um\nnome para o sistema.')
-            self.write_to_xlsx_systems(data)
-            if code and name:
-                self.tree.insert('', 'end', values=(code, name))
-                self.code_entry.delete(0, 'end')
-                self.name_entry.delete(0, 'end')
-                if code == self.code_placeholder:
-                    self.code_entry.insert(0, self.code_placeholder)
-                    self.code_entry.configure(fg='grey')
-                if name == self.name_placeholder:
-                    self.name_entry.insert(0, self.name_placeholder)
-                    self.name_entry.configure(fg='grey')
+            else:
+                self.write_to_xlsx_systems(data)
+                if code and name:
+                    self.tree.insert('', 'end', values=(code, name))
+                    self.code_entry.delete(0, 'end')
+                    self.name_entry.delete(0, 'end')
+                    if code == self.code_placeholder:
+                        self.code_entry.insert(0, self.code_placeholder)
+                        self.code_entry.configure(fg='grey')
+                    if name == self.name_placeholder:
+                        self.name_entry.insert(0, self.name_placeholder)
+                        self.name_entry.configure(fg='grey')
 
     def remove_system(self):
         selected_item = self.tree.selection()
