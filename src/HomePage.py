@@ -117,7 +117,7 @@ class SistemasPage(tk.Frame):
             tkMessageBox.showerror('UNAUTHORIZED', 'O código inserido já existe.\nInsira outro código.')
         else:
             data[int(code)] = name
-            if name == self.name_placeholder:
+            if name == self.name_placeholder or name == '':
                 tkMessageBox.showerror('INVALID DATA', 'Você deve inserir um\nnome para o sistema.')
             else:
                 self.write_to_xlsx_systems(data)
