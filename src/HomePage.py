@@ -226,12 +226,12 @@ class PerfisPage(tk.Frame):
             elif description == self.description_placeholder or description == '':
                 tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\numa descrição\npara o perfil.')
             else: 
-                data[int(code)] = {'Nome do Perfil': name, 'Descrição': description}
-                print(data)
+                new_profile = {"code": int(code), "name": name, "description": description}
+                data.append(new_profile)
                 self.write_to_xlsx_profiles(data)
 
                 if code and name and description:
-                    values = (code, data[int(code)]['Nome do Perfil'], data[int(code)]['Descrição'])
+                    values = (code, name, description)
                     self.tree.insert('', 'end', values=values)
                     self.code_entry.delete(0, 'end')
                     self.name_entry.delete(0, 'end')
@@ -250,27 +250,33 @@ class PerfisPage(tk.Frame):
         selected_item = self.tree.selection()
 
         if selected_item:
-            code = str(self.tree.item(selected_item, 'values')[0])
-            print(code)
+            code = int(self.tree.item(selected_item, 'values')[0])
+            name = str(self.tree.item(selected_item, 'values')[1])
+            description = str(self.tree.item(selected_item, 'values')[2])
+            
             data = self.read_from_xlsx_profiles()
-            print(data)
-            if int(code) in data:
-                del data[int(code)]
-                self.write_to_xlsx_profiles(data)
-                self.tree.delete(selected_item)
-            else:
-                tkMessageBox.showerror('NOT FOUND', 'Esse cadastro não foi\nencontrado no arquivo.')
+            
+            for profile in data:
+                if profile['code'] == code and profile['name'] == name and profile['description'] == description:
+                    data.remove(profile)
+                   
+                    self.write_to_xlsx_profiles(data)
+                    self.tree.delete(selected_item)
+        else:
+            tkMessageBox.showerror('NOT FOUND', 'Esse cadastro não foi\nencontrado no arquivo.')
 
     def load_data(self):
         if not os.path.exists(self.filename):
             self.write_to_xlsx_profiles({})
 
         data = self.read_from_xlsx_profiles()
-        for code, name, description in data.items():
+        for profile in data:
+            code = profile['code']
+            name = profile['name']
+            description = profile['description']
             self.tree.insert('', 'end', values=(code, name, description))
 
     def read_from_xlsx_systems(self):
-        print('read systems')
         try:
             df = pd.read_excel('systems.xlsx', engine='openpyxl')
             data = {row['Código do Sistema']: (row['Nome do Sistema']) for _, row in df.iterrows()}
@@ -279,16 +285,14 @@ class PerfisPage(tk.Frame):
             return {}
             
     def write_to_xlsx_profiles(self, data):
-        print('write profile', data)
-        df = pd.DataFrame(list(data.items()), columns=self.columns[:2])
+        df = pd.DataFrame(data)
         df.to_excel(self.filename, index=False)
 
     def read_from_xlsx_profiles(self):
-        print('read profile')
         try:
             df = pd.read_excel(self.filename, engine='openpyxl')
-            data = {row['Código do Sistema']: {'Nome do Perfil': row['Nome do Perfil'], 'Descrição': row['Descrição']} for _, row in df.iterrows()}
-            return data
+            data = df.to_dict(orient='records')
+            return data                
         except pd.errors.EmptyDataError:
             return {}
 
