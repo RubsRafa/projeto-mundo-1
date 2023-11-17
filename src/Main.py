@@ -3,7 +3,7 @@ from CTkMessagebox import CTkMessagebox
 import Auth as Auth
 import HomePage as Home
 
-class Login():
+class Main():
 
     def __init__(self):
         self.login_window = tk.Tk()
@@ -47,5 +47,5 @@ class Login():
 
 
 if __name__ == '__main__':
-    app = Login()
+    app = Main()
     app.login_window.mainloop()
