@@ -14,6 +14,7 @@ class Login():
 
         self.welcome_label = tk.Label(self.login_window, text='Bem Vindo', anchor='center', bg='black', foreground='white', font=('Calibri', 18))
         self.welcome_label.grid(row=0, column=1, columnspan=2, pady=20, padx=10, sticky='n')
+        
         self.login_label = tk.Label(self.login_window, text="Usuário:", bg='black', foreground='white', font=("Calibri", 12))
         self.login_label.grid(row=1, column=1, padx=10, pady=10, sticky="e")
         self.login_entry = tk.Entry(self.login_window, bg="#303030", foreground='white', font=("Calibri", 12), width=14, bd=0, relief='solid')

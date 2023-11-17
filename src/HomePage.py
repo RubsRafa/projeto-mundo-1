@@ -123,28 +123,20 @@ class PerfisPage(tk.Frame):
 
         self.tree.pack(pady=20)
 
-        # self.code_label = tk.Label(self, text='Código do Sistema', bg='black', foreground='white', font=("Calibri", 12))
-        # self.code_label.grid(row=1, column=1, padx=5, pady=5, sticky='e')
         self.code_entry = tk.Entry(self)
-        # self.code_entry.grid(row=1, column=2, padx=5, pady=5, sticky='w')
-
-        # self.name_label = tk.Label(self, text='Nome do Sistema', bg='black', foreground='white', font=("Calibri", 12))
-        # self.name_label.grid(row=1, column=1, padx=5, pady=5, sticky='e')
         self.name_entry = tk.Entry(self)
-        # self.name_entry.grid(row=1, column=2, padx=5, pady=5, sticky='w')
-
-        # self.description_label = tk.Label(self, text='Descrição', bg='black', foreground='white', font=("Calibri", 12))
-        # self.description_label.grid(row=1, column=1, padx=5, pady=5, sticky='e')
         self.description_entry = tk.Entry(self)
-        # self.description_entry.grid(row=1, column=2, padx=5, pady=5, sticky='w')
 
-        code_placeholder = 'Código do Sistema'
-        name_placeholder = 'Nome do Sistema'
-        description_placeholder = 'Descrição'
-        self.code_entry.insert(0, code_placeholder)
-        self.name_entry.insert(0, name_placeholder)
-        self.description_entry.insert(0, description_placeholder)
+        self.code_placeholder = 'Código do Sistema'
+        self.name_placeholder = 'Nome do Sistema'
+        self.description_placeholder = 'Descrição'
+        # self.code_entry.insert(0, self.code_placeholder)
+        # self.name_entry.insert(0, self.name_placeholder)
+        # self.description_entry.insert(0, self.description_placeholder)
 
+        self.setup_entry(self.code_entry, self.code_placeholder)
+        self.setup_entry(self.name_entry, self.name_placeholder)
+        self.setup_entry(self.description_entry, self.description_placeholder)
 
         add_button = tk.Button(self, text='Adicionar', command=self.adicionar_sistema)
         remove_button = tk.Button(self, text='Remover', command=self.remover_sistema)
@@ -154,6 +146,12 @@ class PerfisPage(tk.Frame):
         self.description_entry.pack(pady=10)
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
+
+    def setup_entry(self, entry, placeholder):
+        entry.insert(0, placeholder)
+        entry.configure(fg='grey')
+        entry.bind("<FocusIn>", lambda event, entry=entry, placeholder=placeholder: entry_focus_in(event, entry, placeholder))
+        entry.bind("<FocusOut>", lambda event, entry=entry, placeholder=placeholder: entry_focus_out(event, entry, placeholder))
 
     def adicionar_sistema(self):
         code = self.code_entry.get()
@@ -165,12 +163,26 @@ class PerfisPage(tk.Frame):
             self.code_entry.delete(0, 'end')
             self.name_entry.delete(0, 'end')
             self.description_entry.delete(0, 'end')
+            self.code_entry.insert(0, self.code_placeholder)
+            self.name_entry.insert(0, self.name_placeholder)
+            self.description_entry.insert(0, self.description_placeholder)
 
     def remover_sistema(self):
         selected_item = self.tree.selection()
 
         if selected_item:
             self.tree.delete(selected_item)
+
+
+def entry_focus_in(event, entry, placeholder):
+    if entry.get() == placeholder:
+        entry.delete(0, 'end')
+        entry.configure(fg='black')
+
+def entry_focus_out(event, entry, placeholder):
+    if not entry.get():
+        entry.insert(0, placeholder)
+        entry.configure(fg='grey')
 
 
 if __name__ == "__main__":
