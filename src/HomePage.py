@@ -80,8 +80,8 @@ class SistemasPage(tk.Frame):
 
         self.tree.pack(pady=20)
 
-        self.code_entry = tk.Entry(self)
-        self.name_entry = tk.Entry(self)
+        self.code_entry = tk.Entry(self, width=30)
+        self.name_entry = tk.Entry(self, width=30)
 
         self.code_placeholder = 'Insira o Código do Sistema'
         self.name_placeholder = 'Insira o Nome do Sistema'
@@ -141,9 +141,9 @@ class PerfisPage(tk.Frame):
 
         self.tree.pack(pady=20)
 
-        self.code_entry = tk.Entry(self)
-        self.name_entry = tk.Entry(self)
-        self.description_entry = tk.Entry(self)
+        self.code_entry = tk.Entry(self, width=30)
+        self.name_entry = tk.Entry(self, width=30)
+        self.description_entry = tk.Entry(self, width=30)
 
         self.code_placeholder = 'Insira o Código do Sistema'
         self.name_placeholder = 'Insira o Nome do Sistema'
