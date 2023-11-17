@@ -1,7 +1,9 @@
 import tkinter as tk
 from tkinter import ttk
+import tkinter.messagebox as tkMessageBox
 import pandas as pd
 import EntryFocus as Focus
+import os
 
 class HomePage(tk.Tk):
     def __init__(self):
@@ -69,14 +71,14 @@ class InicioPage(tk.Frame):
 class SistemasPage(tk.Frame):
     def __init__(self):
         super().__init__()
-
+        self.filename = 'systems.xlsx'
         self.create_widgets()
 
     def create_widgets(self):
-        columns = ('Código do Sistema', 'Nome do Sistema')
-        self.tree = ttk.Treeview(self, columns=columns, show='headings', height=10)
+        self.columns = ('Código do Sistema', 'Nome do Sistema')
+        self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
 
-        for col in columns:
+        for col in self.columns:
             self.tree.heading(col, text=col)
             self.tree.column(col, width=150)
 
@@ -98,28 +100,71 @@ class SistemasPage(tk.Frame):
         self.name_entry.pack(pady=10)
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
+
+        self.load_data()
     
 
     def add_system(self):
         code = self.code_entry.get()
         name = self.name_entry.get()
+        data = self.read_from_xlsx_systems()
+        try:
+            int(code)
+        except:
+            tkMessageBox.showerror('INVALID DATA', 'O código deve ser um número!')
 
-        if code and name:
-            self.tree.insert('', 'end', values=(code, name))
-            self.code_entry.delete(0, 'end')
-            self.name_entry.delete(0, 'end')
-            if code == self.code_placeholder:
-                self.code_entry.insert(0, self.code_placeholder)
-                self.code_entry.configure(fg='grey')
+        if int(code) in data:
+            tkMessageBox.showerror('UNAUTHORIZED', 'O código inserido já existe.\nInsira outro código.')
+        else:
+            data[int(code)] = name
             if name == self.name_placeholder:
-                self.name_entry.insert(0, self.name_placeholder)
-                self.name_entry.configure(fg='grey')
+                tkMessageBox.showerror('INVALID DATA', 'Você deve inserir um\nnome para o sistema.')
+            self.write_to_xlsx_systems(data)
+            if code and name:
+                self.tree.insert('', 'end', values=(code, name))
+                self.code_entry.delete(0, 'end')
+                self.name_entry.delete(0, 'end')
+                if code == self.code_placeholder:
+                    self.code_entry.insert(0, self.code_placeholder)
+                    self.code_entry.configure(fg='grey')
+                if name == self.name_placeholder:
+                    self.name_entry.insert(0, self.name_placeholder)
+                    self.name_entry.configure(fg='grey')
 
     def remove_system(self):
         selected_item = self.tree.selection()
 
         if selected_item:
-            self.tree.delete(selected_item)
+            code = str(self.tree.item(selected_item, 'values')[0])
+            data = self.read_from_xlsx_systems()
+
+            if int(code) in data:
+                del data[int(code)]
+                self.write_to_xlsx_systems(data)
+                self.tree.delete(selected_item)
+            else:
+                tkMessageBox.showerror('NOT FOUND.', f'Esse código {code} não foi\nencontrado no arquivo.')
+    
+    def load_data(self):
+        if not os.path.exists(self.filename):
+            self.write_to_xlsx_systems({})
+
+        data = self.read_from_xlsx_systems()
+        for code, name in data.items():
+            self.tree.insert('', 'end', values=(code, name))
+    
+    def write_to_xlsx_systems(self, data):
+        df = pd.DataFrame(list(data.items()), columns=self.columns)
+        df.to_excel(self.filename, index=False)
+        
+    def read_from_xlsx_systems(self):
+        try:
+            df = pd.read_excel(self.filename, engine='openpyxl')
+            data = {row['Código do Sistema']: (row['Nome do Sistema']) for _, row in df.iterrows()}
+            return data
+        except pd.errors.EmptyDataError:
+            return {}
+
 
 
 class PerfisPage(tk.Frame):
@@ -159,12 +204,6 @@ class PerfisPage(tk.Frame):
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
 
-    def setup_entry(self, entry, placeholder):
-        entry.insert(0, placeholder)
-        entry.configure(fg='grey')
-        entry.bind("<FocusIn>", lambda event, entry=entry, placeholder=placeholder: entry_focus_in(event, entry, placeholder))
-        entry.bind("<FocusOut>", lambda event, entry=entry, placeholder=placeholder: entry_focus_out(event, entry, placeholder))
-
     def add_system(self):
         code = self.code_entry.get()
         name = self.name_entry.get()
@@ -198,15 +237,6 @@ def write_to_xlsx_profiles(filename, data):
     df.to_excel(filename, index=False)
 
 def read_from_xlsx_profiles(filename):
-    df = pd.read_excel(filename)
-    data = {row['Código']: row['Sistema'] for _, row in df.iterrows()}
-    return data
-
-def write_to_xlsx_systems(filename, data):
-    df = pd.DataFrame(list(data.items()), columns=['Código', 'Sistema', 'Descrição'])
-    df.to_excel(filename, index=False)
-
-def read_from_xlsx_systems(filename):
     df = pd.read_excel(filename)
     data = {row['Código']: row['Sistema'] for _, row in df.iterrows()}
     return data
