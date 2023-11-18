@@ -479,92 +479,112 @@ class UsuariosPage(tk.Frame):
             self.tree.column(col, width=180)
         self.tree.pack(pady=20)
 
-        profile_1 = self.create_association_list()
-        profile_2 = self.create_association_list()
+        self.cpf_var = tk.StringVar()
 
-        self.profile_access_1 = tk.StringVar(self)
-        self.profile_access_1.set(profile_1[0])
-        profile_access_1_dropdown = ttk.Combobox(self, textvariable=self.profile_access_1, values=profile_1)
-        profile_access_1_dropdown.pack(pady=10)
+        self.cpf_entry = tk.Entry(self, textvariable=self.cpf_var, validate='key', width=30)
+        self.cpf_entry.config(validatecommand=(self.register(self.validate_cpf), '%P'))
+        self.cpf_placeholder = 'Insira o CPF do Usuário'
+        Focus.setup_entry(self.cpf_entry, self.cpf_placeholder)
+        self.cpf_entry.pack(pady=10)
 
-        self.profile_access_2 = tk.StringVar(self)
-        self.profile_access_2.set(profile_2[0])
-        profile_access_2_dropdown = ttk.Combobox(self, textvariable=self.profile_access_2, values=profile_2)
-        profile_access_2_dropdown.pack(pady=10)
+        self.system = self.create_system_list()
+        self.profile = self.create_profile_list()
 
-        add_button = tk.Button(self, text='Adicionar à Matriz', command=self.add_to_matrix)
-        remove_button = tk.Button(self, text='Remover', command=self.remove_matrix)
+        self.system_entry = tk.StringVar(self)
+        self.system_entry.set(self.system[0])
+        system_entry_dropdown = ttk.Combobox(self, textvariable=self.system_entry, values=self.system)
+        system_entry_dropdown.pack(pady=10)
+
+        self.profile_entry = tk.StringVar(self)
+        self.profile_entry.set(self.profile[0])
+        profile_entry_dropdown = ttk.Combobox(self, textvariable=self.profile_entry, values=self.profile)
+        profile_entry_dropdown.pack(pady=10)
+
+        add_button = tk.Button(self, text='Adicionar', command=self.add_user)
+        remove_button = tk.Button(self, text='Remover', command=self.remove_user)
 
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
 
         self.load_data()
+    
+    def validate_cpf(self, new_value):
+        if new_value.isdigit() or new_value == '':
+            if len(new_value) <= 11:
+                return True
+        return False
 
-    def add_to_matrix(self):
-        
-        profile_1 = self.profile_access_1.get()
-        profile_2 = self.profile_access_2.get()
-        if profile_1 == profile_2:
-            tkMessageBox.showerror('INVALID REQUEST', 'Escolha perfis de\nacesso diferentes.')
+
+    def add_user(self):
+        cpf = self.cpf_entry.get()
+        system = self.system_entry.get()
+        profile = self.profile_entry.get()
+        if not cpf.isdigit() or cpf == '' or len(cpf)>11:
+            tkMessageBox.showerror('INVALID DATA', 'Digite um número\nválido para CPF.')
         else:
-            data = self.read_from_xlsx_matriz()
+            data = self.read_from_xlsx_users()
             for item in data:
-                item1 = item['profile_access_1']
-                item2 = item['profile_access_2']
-                if profile_1 == item1 and profile_2 == item2:
-                    tkMessageBox.showerror('INVALID', 'Os perfis de acesso\njá foram traçados.')
+                cpf_user = item['cpf']
+                if cpf == cpf_user:
+                    tkMessageBox.showerror('FORBIDDEN', 'Esse CPF já\nfoi cadastrado.')
                     return
             else:
-                new_matrix = { "profile_access_1": profile_1, "profile_access_2": profile_2 }
-                data.append(new_matrix)
-                self.write_to_xlsx_matriz(data)
-                self.tree.insert('', 'end', values=(profile_1, profile_2))
+                new_user = { 'cpf': cpf, 'system': system, 'profile': profile }
+                data.append(new_user)
+                self.write_to_xlsx_users(data)
+                self.tree.insert('', 'end', values=(cpf, system, profile))
 
-    def remove_matrix(self):
+    def remove_user(self):
+        print('remove user')
         selected_item = self.tree.selection()
 
         if selected_item:
-            profile1 = self.tree.item(selected_item, 'values')[0]
-            profile2 = self.tree.item(selected_item, 'values')[1]
-            data = self.read_from_xlsx_matriz()
-
-            for profiles in data:
-                if profiles['profile_access_1'] == profile1 and profiles['profile_access_2'] == profile2:
-                    data.remove(profiles)
-
-                    self.write_to_xlsx_matriz(data)
+            cpf = self.tree.item(selected_item, 'values')[0]
+            system = self.tree.item(selected_item, 'values')[1]
+            profile = self.tree.item(selected_item, 'values')[2]
+            data = self.read_from_xlsx_users()
+            print('oi')
+            print(cpf, system, profile)
+            for item in data:
+                if item['cpf'] == int(cpf) and item['system'] == system and item['profile'] == profile:
+                    data.remove(item)
+                    self.write_to_xlsx_users(data)
                     self.tree.delete(selected_item)
         else:
-            tkMessageBox.showerror('NOT FOUND', 'Esse registro não\nfoi encontrado.')
+            tkMessageBox.showerror('NOT FOUND', 'Esse usuário não\nfoi encontrado.')
     
     def load_data(self):
         if not os.path.exists(self.filename):
-            self.write_to_xlsx_matriz({})
+            self.write_to_xlsx_users({})
 
-        data = self.read_from_xlsx_matriz()
+        data = self.read_from_xlsx_users()
 
         for item in data:
+            cpf = item['cpf']
+            system = item['system']
+            profile = item['profile']
+            self.tree.insert('', 'end', values=(cpf, system, profile))
 
-            profile1 = item['profile_access_1']
-            profile2 = item['profile_access_2']
-            self.tree.insert('', 'end', values=(profile1, profile2))
-
-    def create_association_list(self):
+    def create_system_list(self):
         systems_data = self.read_from_xlsx_systems()
+
+        system_list = []
+        for _, name in systems_data.items():
+            system_list.append(name)
+        
+        return system_list
+    
+    def create_profile_list(self):
         profiles_data = self.read_from_xlsx_profiles()
 
-        association_list = []
-
+        profiles_list = []
         for profile in profiles_data:
-            profile_name = profile['name']
+            name = profile['name']
+            profiles_list.append(name)
 
-            for _, name in systems_data.items():
-                data = f'{profile_name} - {name}'
-                association_list.append(data)
-
-        return association_list
+        return profiles_list
     
-    def read_from_xlsx_matriz(self):
+    def read_from_xlsx_users(self):
         try:
             df = pd.read_excel(self.filename, engine='openpyxl')
             data = df.to_dict(orient='records')
@@ -572,7 +592,7 @@ class UsuariosPage(tk.Frame):
         except pd.errors.EmptyDataError:
             return {}
 
-    def write_to_xlsx_matriz(self, data):
+    def write_to_xlsx_users(self, data):
         df = pd.DataFrame(data)
         df.to_excel(self.filename, index=False)
 
