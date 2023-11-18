@@ -48,14 +48,18 @@ class InicioPage(tk.Frame):
     def __init__(self):
         super().__init__()
 
+        self.title = ("Gestão Eficiente de Perfis de Acesso Corporativo:\nPrevenção de Conflitos e Segurança de Dados\n")
         self.content = (
-            "Início\n"
-            "Adicionar mais texto"
-        )
+            'O projeto em desenvolvimento visa aprimorar a gestão de perfis de\nacesso em sistemas corporativos, uma demanda crucial para empresas\nenfrentando desafios de auditoria e preocupações com fraudes financeiras.\nCom a implementação da Lei Geral de Proteção de Dados (LGPD) no Brasil, a\natenção à segurança das informações pessoais tornou-se imperativa,\ntornando essencial um gerenciamento eficaz de acessos.',
+            'Para garantir o funcionamento eficiente, o projeto propõe cadastros\ndetalhados, abrangendo sistemas, perfis de acesso e a própria Matriz SoD.\nCada elemento do cadastro é estruturado para fornecer informações essenciais,\ncomo códigos de sistema, nomes de perfil e descrições detalhadas, facilitando\na solicitação e concessão de acessos pelos gestores.'
+            )
         self.color = '#272727'
 
+        title_label = tk.Label(self, text=self.title, font=('Roboto', 16), foreground='white', bg='black')
+        title_label.pack(padx=20, pady=20)
+
         self.configure(bg=self.color)
-        label = tk.Label(self, text=self.content, font=('Roboto', 14), foreground='white', bg='gray')
+        label = tk.Label(self, text=self.content, font=('Roboto', 12), foreground='white', bg='gray')
         label.pack(padx=20, pady=20)
 
 
