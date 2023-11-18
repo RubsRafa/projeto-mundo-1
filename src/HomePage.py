@@ -1,5 +1,6 @@
 import tkinter as tk
 from tkinter import ttk
+from PIL import Image, ImageTk
 import tkinter.messagebox as tkMessageBox
 import pandas as pd
 import EntryFocus as Focus
@@ -20,11 +21,13 @@ class HomePage(tk.Tk):
                 'Início': InicioPage,
                 'Sistemas': SistemasPage,
                 'Perfis de Acesso': PerfisPage,
-                'Matriz SoD': MatrizPage
+                'Matriz SoD': MatrizPage,
+                'Alunos': AlunosPage
             },
             'aluno': {
                 'Início': InicioPage,
-                'Sistemas': SistemasPage
+                'Sistemas': SistemasPage,
+                'Alunos': AlunosPage
             },
         }
 
@@ -34,7 +37,6 @@ class HomePage(tk.Tk):
         for page, _ in self.pages.items():
             self.options.append(page)
 
-        # options = ['Início', 'Sistemas', 'Perfis de Acesso', 'Matriz SoD']
         for item in self.options:
             self.btn = tk.Button(self.bar, text=item, command=lambda text=item: self.show_button(text), foreground='gray', bg='black', activebackground='gray', activeforeground='white', font=('Roboto', 14), borderwidth=0)
             self.btn.pack(pady=10, padx=10)
@@ -42,12 +44,6 @@ class HomePage(tk.Tk):
         self.main_content = tk.Frame(self, bg='#273746')
         self.main_content.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-        # self.pages = {
-        #     'Início': InicioPage,
-        #     'Sistemas': SistemasPage,
-        #     'Perfis de Acesso': PerfisPage,
-        #     'Matriz SoD': MatrizPage
-        # }
 
         self.show_page('Início')
 
@@ -96,6 +92,8 @@ class SistemasPage(tk.Frame):
         # self.style.theme_use('clam')
         # self.style.configure("Treeview", background='black', fieldbackground="black", foreground="white")
 
+        self.title = tk.Label(self, text='Registro de sistemas', font=('Roboto', 16), foreground='black')
+        self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Sistema')
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
 
@@ -195,6 +193,8 @@ class PerfisPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
+        self.title = tk.Label(self, text='Registro de perfis de acesso', font=('Roboto', 16), foreground='black')
+        self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Perfil', 'Descrição')
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
 
@@ -328,6 +328,8 @@ class MatrizPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
+        self.title = tk.Label(self, text='Registro de restrições', font=('Roboto', 16), foreground='black')
+        self.title.pack(padx=20, pady=20)
         self.columns = ('Perfil de Acesso 1', 'Perfil de Acesso 2')
         self.matrix_tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
 
@@ -449,6 +451,29 @@ class MatrizPage(tk.Frame):
         except pd.errors.EmptyDataError:
             return {}
 
+
+class AlunosPage(tk.Frame):
+    def __init__(self):
+        super().__init__()
+        # Lista de alunos
+        self.alunos = [
+            "Roberta Coutinho Paes - Matrícula 202307274356",
+            "Rubia Rafaela Nascimento Hilario - Matrícula 202003423769",
+            "Ramon Santos Cerqueira - Matrícula 202303875487",
+            "Roger Souza Funaki - Matrícula 202301156092",
+            "Sara Suely Cavalcante de Souza - Matrícula 20230717735",
+            "Thiago Rodrigo Balão - Matrícula 202308210793"
+        ]
+        self.title = ('Alunos - Grupo 19')
+        self.color = '#17202A'
+
+        title_label = tk.Label(self, text=self.title, font=('Roboto', 17), foreground='white', bg=self.color)
+        title_label.pack(padx=20, pady=20)
+
+        self.configure(bg=self.color)
+        for line in self.alunos:
+            label = tk.Label(self, text=line, font=('Roboto', 13), foreground='white', bg=self.color)
+            label.pack(padx=20, pady=5)
 
 
 
