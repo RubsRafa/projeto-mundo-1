@@ -523,19 +523,23 @@ class UsuariosPage(tk.Frame):
             tkMessageBox.showerror('INVALID DATA', 'Digite um número\nválido para CPF.')
         else:
             data = self.read_from_xlsx_users()
+            formatted_cpf = f"{cpf[:3]}.{cpf[3:6]}.{cpf[6:9]}-{cpf[9:]}"
             for item in data:
                 cpf_user = item['cpf']
-                if cpf == cpf_user:
+                if formatted_cpf == cpf_user:
                     tkMessageBox.showerror('FORBIDDEN', 'Esse CPF já\nfoi cadastrado.')
                     return
             else:
-                new_user = { 'cpf': cpf, 'system': system, 'profile': profile }
+                new_user = { 'cpf': formatted_cpf, 'system': system, 'profile': profile }
                 data.append(new_user)
                 self.write_to_xlsx_users(data)
-                self.tree.insert('', 'end', values=(cpf, system, profile))
+                self.tree.insert('', 'end', values=(formatted_cpf, system, profile))
+                self.cpf_entry.delete(0, 'end')
+                if self.cpf_entry == self.cpf_placeholder:
+                    self.cpf_entry.insert(0, self.cpf_placeholder)
+                    self.cpf_entry.configure(fg='grey')
 
     def remove_user(self):
-        print('remove user')
         selected_item = self.tree.selection()
 
         if selected_item:
@@ -543,10 +547,9 @@ class UsuariosPage(tk.Frame):
             system = self.tree.item(selected_item, 'values')[1]
             profile = self.tree.item(selected_item, 'values')[2]
             data = self.read_from_xlsx_users()
-            print('oi')
-            print(cpf, system, profile)
+     
             for item in data:
-                if item['cpf'] == int(cpf) and item['system'] == system and item['profile'] == profile:
+                if item['cpf'] == cpf and item['system'] == system and item['profile'] == profile:
                     data.remove(item)
                     self.write_to_xlsx_users(data)
                     self.tree.delete(selected_item)
