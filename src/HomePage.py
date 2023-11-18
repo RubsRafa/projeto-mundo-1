@@ -9,10 +9,10 @@ class HomePage(tk.Tk):
     def __init__(self):
         super().__init__()
         self.title('HOME PAGE')
-        self.geometry('800x600')
+        self.geometry('880x600')
         # print('username', username)
 
-        self.bar = tk.Frame(self, bg='#505050', width=200)
+        self.bar = tk.Frame(self, bg='#273746', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
 
         options = ['Início', 'Sistemas', 'Perfis de Acesso', 'Matriz SoD']
@@ -20,7 +20,7 @@ class HomePage(tk.Tk):
             self.btn = tk.Button(self.bar, text=item, command=lambda text=item: self.show_button(text), foreground='gray', bg='black', activebackground='gray', activeforeground='white', font=('Roboto', 14), borderwidth=0)
             self.btn.pack(pady=10, padx=10)
 
-        self.main_content = tk.Frame(self, bg='black')
+        self.main_content = tk.Frame(self, bg='#273746')
         self.main_content.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
         self.pages = {
@@ -78,17 +78,18 @@ class InicioPage(tk.Frame):
 
         self.title = ("Gestão Eficiente de Perfis de Acesso Corporativo:\nPrevenção de Conflitos e Segurança de Dados\n")
         self.content = (
-            'O projeto em desenvolvimento visa aprimorar a gestão de perfis de\nacesso em sistemas corporativos, uma demanda crucial para empresas\nenfrentando desafios de auditoria e preocupações com fraudes financeiras.\nCom a implementação da Lei Geral de Proteção de Dados (LGPD) no Brasil, a\natenção à segurança das informações pessoais tornou-se imperativa,\ntornando essencial um gerenciamento eficaz de acessos.',
-            'Para garantir o funcionamento eficiente, o projeto propõe cadastros\ndetalhados, abrangendo sistemas, perfis de acesso e a própria Matriz SoD.\nCada elemento do cadastro é estruturado para fornecer informações essenciais,\ncomo códigos de sistema, nomes de perfil e descrições detalhadas, facilitando\na solicitação e concessão de acessos pelos gestores.'
+            "Este projeto foi desenvolvido  para o controle interno de uma empresa\ne é responsável por analisar os perfis de acessos de seus funcionários\nem seu sistema e verificar se a combinação de perfis, para um\nmesmo usuário, pode apresentar algum conflito de interesse.\n",
+            "Um conflito de interesse é quando o usuário pode se aproveitar dos acessos\nque possui para praticar uma fraude."
             )
-        self.color = '#272727'
+        self.color = '#17202A'
 
-        title_label = tk.Label(self, text=self.title, font=('Roboto', 16), foreground='white', bg='black')
+        title_label = tk.Label(self, text=self.title, font=('Roboto', 17), foreground='white', bg=self.color)
         title_label.pack(padx=20, pady=20)
 
         self.configure(bg=self.color)
-        label = tk.Label(self, text=self.content, font=('Roboto', 12), foreground='white', bg='gray')
-        label.pack(padx=20, pady=20)
+        for line in self.content:
+            label = tk.Label(self, text=line, font=('Roboto', 13), foreground='white', bg=self.color)
+            label.pack(padx=20, pady=5)
 
 
 class SistemasPage(tk.Frame):
