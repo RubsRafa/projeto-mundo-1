@@ -369,14 +369,13 @@ class MatrizPage(tk.Frame):
             tkMessageBox.showerror('NOT FOUND', 'Esse registro não\nfoi encontrado.')
     
     def load_data(self):
-        print('carregou')
         if not os.path.exists(self.filename):
             self.write_to_xlsx_matriz({})
 
         data = self.read_from_xlsx_matriz()
-        print(data)
+
         for item in data:
-            print(item)
+
             profile1 = item['profile_access_1']
             profile2 = item['profile_access_2']
             self.matrix_tree.insert('', 'end', values=(profile1, profile2))

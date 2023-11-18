@@ -1,5 +1,6 @@
 import bcrypt
 import pandas as pd
+import tkinter.messagebox as tkMessageBox
 
 def hash_password(password):
     salt = bcrypt.gensalt()
@@ -16,9 +17,9 @@ def authenticateUser(user, password):
         if bcrypt.checkpw(password.encode('utf-8'), stored_hash):
             return True
         else:
-            print('Senha incorreta')
+            tkMessageBox.showerror('UNAUTHORIZED', 'Usuário ou senha incorretos')
     else:
-        print('Usuário não encontrado')
+        tkMessageBox.showerror('NOT FOUND', 'Usuário não encontrado.')
     
     return False
 

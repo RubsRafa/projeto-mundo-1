@@ -32,11 +32,9 @@ class Main():
 
     
     def login(self):
-        print('Login verificado')
         
         verifyUser = Auth.authenticateUser(self.login_entry.get(), self.password_entry.get())
         if verifyUser == True:
-            print('Abrir página principal')
             self.login_window.destroy()
             open_home_page = Home.HomePage()
             open_home_page.mainloop()
