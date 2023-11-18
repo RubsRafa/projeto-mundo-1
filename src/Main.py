@@ -2,6 +2,7 @@ import tkinter as tk
 from CTkMessagebox import CTkMessagebox
 import Auth as Auth
 import HomePage as Home
+import Alunos as Alunos
 
 class Main():
 
@@ -27,6 +28,9 @@ class Main():
         
         login_button = tk.Button(self.login_window, text="Login", command=self.login, bg="#505050", foreground='white', font=("Calibri", 12))
         login_button.grid(row=3, column=1, columnspan=2, pady=30)
+
+        alunos_button = tk.Button(self.login_window, text="Alunos", command=self.alunos, bg="#505050", foreground='white', font=("Calibri", 12))
+        alunos_button.grid(row=4, column=1, columnspan=2, pady=10)
         
         self.login_window.mainloop()
 
@@ -36,10 +40,16 @@ class Main():
         verifyUser = Auth.authenticateUser(self.login_entry.get(), self.password_entry.get())
         if verifyUser == True:
             self.login_window.destroy()
+            # username = self.login_entry.get()
             open_home_page = Home.HomePage()
             open_home_page.mainloop()
         else:
             CTkMessagebox(title='Erro ao fazer o login', message='Usuário ou senha incorretos', icon='cancel', width=280)
+    
+    def alunos(self):
+        self.login_window.destroy()
+        Alunos.Alunos()
+        
 
         
 

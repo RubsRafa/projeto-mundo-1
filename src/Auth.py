@@ -36,10 +36,11 @@ def read_from_xlsx(filename):
 
 
 hashed_passwords = {
+    # 'admin': hash_password('1o)4~6AyPEe['),
     'admin': hash_password('admin'),
-    'diretor': hash_password('#01#Estacio23'),
-    'gerente': hash_password('#02#Estacio23'),
-    'vendedor': hash_password('#03#Estacio23')
+    'diretor': hash_password('60#QoUAUU>9o'),
+    'professor': hash_password('/sKk_CtP=vw>05rx'),
+    'aluno': hash_password('K(&MQZJjKu<O>FT[')
 }
 
 

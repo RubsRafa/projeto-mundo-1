@@ -10,6 +10,7 @@ class HomePage(tk.Tk):
         super().__init__()
         self.title('HOME PAGE')
         self.geometry('800x600')
+        # print('username', username)
 
         self.bar = tk.Frame(self, bg='#505050', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
@@ -28,6 +29,33 @@ class HomePage(tk.Tk):
             'Perfis de Acesso': PerfisPage,
             'Matriz SoD': MatrizPage
         }
+
+
+        # if username == 'admin':
+        #     self.pages = {
+        #        'Início': InicioPage,
+        #        'Sistemas': SistemasPage,
+        #        'Perfis de Acesso': PerfisPage,
+        #        'Matriz SoD': MatrizPage
+        #     }
+        # elif username == 'diretor':
+        #     self.pages = {
+        #         'Início': InicioPage,
+        #         'Sistemas': SistemasPage,
+        #         'Perfis de Acesso': PerfisPage,
+        #         'Matriz SoD': MatrizPage
+        #     }
+        # elif username == 'Professor':
+        #     self.pages = {
+        #         'Início': InicioPage,
+        #         'Sistemas': SistemasPage,
+        #         'Perfis de Acesso': PerfisPage
+        #     }
+        # else: 
+        #     self.pages = {
+        #         'Início': InicioPage,
+        #         'Sistemas': SistemasPage
+        #     }
 
         self.show_page('Início')
 
