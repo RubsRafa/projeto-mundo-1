@@ -7,11 +7,11 @@ import EntryFocus as Focus
 import os
 
 class HomePage(tk.Tk):
-    def __init__(self, username):
+    def __init__(self):
         super().__init__()
         self.title('HOME PAGE')
         self.geometry('880x600')
-        self.username = username
+        # self.username = username
 
         self.bar = tk.Frame(self, bg='#273746', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
@@ -30,7 +30,16 @@ class HomePage(tk.Tk):
             },
         }
 
-        self.pages = self.switch_case[self.username]
+        self.pages = {
+                'Início': InicioPage,
+                'Sistemas': SistemasPage,
+                'Perfis de Acesso': PerfisPage,
+                'Matriz SoD': MatrizPage,
+                'Usuários': UsuariosPage,
+                'Alunos': AlunosPage
+            }
+
+        # self.pages = self.switch_case[self.username]
 
         self.options = []
         for page, _ in self.pages.items():
@@ -91,7 +100,7 @@ class SistemasPage(tk.Frame):
         # self.style.theme_use('clam')
         # self.style.configure("Treeview", background='black', fieldbackground="black", foreground="white")
 
-        self.title = tk.Label(self, text='Registro de sistemas', font=('Roboto', 16), foreground='black')
+        self.title = tk.Label(self, text='Cadastro e registro de sistemas', font=('Roboto', 16), foreground='black')
         self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Sistema')
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
@@ -192,7 +201,7 @@ class PerfisPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.title = tk.Label(self, text='Registro de perfis de acesso', font=('Roboto', 16), foreground='black')
+        self.title = tk.Label(self, text='Cadastro de perfis de acesso', font=('Roboto', 16), foreground='black')
         self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Perfil', 'Descrição')
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
@@ -330,12 +339,12 @@ class MatrizPage(tk.Frame):
         self.title = tk.Label(self, text='Registro de restrições', font=('Roboto', 16), foreground='black')
         self.title.pack(padx=20, pady=20)
         self.columns = ('Perfil de Acesso 1', 'Perfil de Acesso 2')
-        self.matrix_tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
+        self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
 
         for col in self.columns:
-            self.matrix_tree.heading(col, text=col)
-            self.matrix_tree.column(col, width=180)
-        self.matrix_tree.pack(pady=20)
+            self.tree.heading(col, text=col)
+            self.tree.column(col, width=180)
+        self.tree.pack(pady=20)
 
         profile_1 = self.create_association_list()
         profile_2 = self.create_association_list()
@@ -376,14 +385,14 @@ class MatrizPage(tk.Frame):
                 new_matrix = { "profile_access_1": profile_1, "profile_access_2": profile_2 }
                 data.append(new_matrix)
                 self.write_to_xlsx_matriz(data)
-                self.matrix_tree.insert('', 'end', values=(profile_1, profile_2))
+                self.tree.insert('', 'end', values=(profile_1, profile_2))
 
     def remove_matrix(self):
-        selected_item = self.matrix_tree.selection()
+        selected_item = self.tree.selection()
 
         if selected_item:
-            profile1 = self.matrix_tree.item(selected_item, 'values')[0]
-            profile2 = self.matrix_tree.item(selected_item, 'values')[1]
+            profile1 = self.tree.item(selected_item, 'values')[0]
+            profile2 = self.tree.item(selected_item, 'values')[1]
             data = self.read_from_xlsx_matriz()
 
             for profiles in data:
@@ -391,7 +400,7 @@ class MatrizPage(tk.Frame):
                     data.remove(profiles)
 
                     self.write_to_xlsx_matriz(data)
-                    self.matrix_tree.delete(selected_item)
+                    self.tree.delete(selected_item)
         else:
             tkMessageBox.showerror('NOT FOUND', 'Esse registro não\nfoi encontrado.')
     
@@ -405,7 +414,140 @@ class MatrizPage(tk.Frame):
 
             profile1 = item['profile_access_1']
             profile2 = item['profile_access_2']
-            self.matrix_tree.insert('', 'end', values=(profile1, profile2))
+            self.tree.insert('', 'end', values=(profile1, profile2))
+
+    def create_association_list(self):
+        systems_data = self.read_from_xlsx_systems()
+        profiles_data = self.read_from_xlsx_profiles()
+
+        association_list = []
+
+        for profile in profiles_data:
+            profile_name = profile['name']
+
+            for _, name in systems_data.items():
+                data = f'{profile_name} - {name}'
+                association_list.append(data)
+
+        return association_list
+    
+    def read_from_xlsx_matriz(self):
+        try:
+            df = pd.read_excel(self.filename, engine='openpyxl')
+            data = df.to_dict(orient='records')
+            return data
+        except pd.errors.EmptyDataError:
+            return {}
+
+    def write_to_xlsx_matriz(self, data):
+        df = pd.DataFrame(data)
+        df.to_excel(self.filename, index=False)
+
+    def read_from_xlsx_systems(self):
+        try:
+            df = pd.read_excel(self.filename_systems, engine='openpyxl')
+            data = {row['Código do Sistema']: (row['Nome do Sistema']) for _, row in df.iterrows()}
+            return data
+        except pd.errors.EmptyDataError:
+            return {}
+            
+    def read_from_xlsx_profiles(self):
+        try:
+            df = pd.read_excel(self.filename_profiles, engine='openpyxl')
+            data = df.to_dict(orient='records')
+            return data                
+        except pd.errors.EmptyDataError:
+            return {}
+
+
+class UsuariosPage(tk.Frame):
+    def __init__(self):
+        super().__init__()
+        self.filename = 'users.xlsx'
+        self.filename_systems = 'systems.xlsx'
+        self.filename_profiles = 'profiles.xlsx'
+        self.create_widgets()
+
+    def create_widgets(self):
+        self.title = tk.Label(self, text='Cadastro de Perfis dos Usuários', font=('Roboto', 16), foreground='black')
+        self.title.pack(padx=20, pady=20)
+        self.columns = ('CPF', 'Código do Sistema', 'Nome do Perfil')
+        self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
+
+        for col in self.columns:
+            self.tree.heading(col, text=col)
+            self.tree.column(col, width=180)
+        self.tree.pack(pady=20)
+
+        profile_1 = self.create_association_list()
+        profile_2 = self.create_association_list()
+
+        self.profile_access_1 = tk.StringVar(self)
+        self.profile_access_1.set(profile_1[0])
+        profile_access_1_dropdown = ttk.Combobox(self, textvariable=self.profile_access_1, values=profile_1)
+        profile_access_1_dropdown.pack(pady=10)
+
+        self.profile_access_2 = tk.StringVar(self)
+        self.profile_access_2.set(profile_2[0])
+        profile_access_2_dropdown = ttk.Combobox(self, textvariable=self.profile_access_2, values=profile_2)
+        profile_access_2_dropdown.pack(pady=10)
+
+        add_button = tk.Button(self, text='Adicionar à Matriz', command=self.add_to_matrix)
+        remove_button = tk.Button(self, text='Remover', command=self.remove_matrix)
+
+        add_button.pack(pady=10)
+        remove_button.pack(pady=10)
+
+        self.load_data()
+
+    def add_to_matrix(self):
+        
+        profile_1 = self.profile_access_1.get()
+        profile_2 = self.profile_access_2.get()
+        if profile_1 == profile_2:
+            tkMessageBox.showerror('INVALID REQUEST', 'Escolha perfis de\nacesso diferentes.')
+        else:
+            data = self.read_from_xlsx_matriz()
+            for item in data:
+                item1 = item['profile_access_1']
+                item2 = item['profile_access_2']
+                if profile_1 == item1 and profile_2 == item2:
+                    tkMessageBox.showerror('INVALID', 'Os perfis de acesso\njá foram traçados.')
+                    return
+            else:
+                new_matrix = { "profile_access_1": profile_1, "profile_access_2": profile_2 }
+                data.append(new_matrix)
+                self.write_to_xlsx_matriz(data)
+                self.tree.insert('', 'end', values=(profile_1, profile_2))
+
+    def remove_matrix(self):
+        selected_item = self.tree.selection()
+
+        if selected_item:
+            profile1 = self.tree.item(selected_item, 'values')[0]
+            profile2 = self.tree.item(selected_item, 'values')[1]
+            data = self.read_from_xlsx_matriz()
+
+            for profiles in data:
+                if profiles['profile_access_1'] == profile1 and profiles['profile_access_2'] == profile2:
+                    data.remove(profiles)
+
+                    self.write_to_xlsx_matriz(data)
+                    self.tree.delete(selected_item)
+        else:
+            tkMessageBox.showerror('NOT FOUND', 'Esse registro não\nfoi encontrado.')
+    
+    def load_data(self):
+        if not os.path.exists(self.filename):
+            self.write_to_xlsx_matriz({})
+
+        data = self.read_from_xlsx_matriz()
+
+        for item in data:
+
+            profile1 = item['profile_access_1']
+            profile2 = item['profile_access_2']
+            self.tree.insert('', 'end', values=(profile1, profile2))
 
     def create_association_list(self):
         systems_data = self.read_from_xlsx_systems()
