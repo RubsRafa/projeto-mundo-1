@@ -259,12 +259,14 @@ class PerfisPage(tk.Frame):
         if not os.path.exists(self.filename):
             self.write_to_xlsx_profiles({})
 
+        systems = self.read_from_xlsx_systems()
         data = self.read_from_xlsx_profiles()
         for profile in data:
             code = profile['code']
             name = profile['name']
             description = profile['description']
-            self.tree.insert('', 'end', values=(code, name, description))
+            system_name = systems[code]
+            self.tree.insert('', 'end', values=(f'{code} - {system_name}', name, description))
 
     def read_from_xlsx_systems(self):
         try:
