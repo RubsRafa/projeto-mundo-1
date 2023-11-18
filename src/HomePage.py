@@ -323,9 +323,6 @@ class MatrizPage(tk.Frame):
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
 
-        save_button = tk.Button(self, text='Salvar Matriz', command=self.save_matrix)
-        save_button.pack(pady=10)
-
         self.load_data()
 
     def add_to_matrix(self):
@@ -337,11 +334,11 @@ class MatrizPage(tk.Frame):
         else:
             data = self.read_from_xlsx_matriz()
             for item in data:
-                print(item)
                 item1 = item['profile_access_1']
                 item2 = item['profile_access_2']
                 if profile_1 == item1 and profile_2 == item2:
                     tkMessageBox.showerror('INVALID', 'Os perfis de acesso\njá foram traçados.')
+                    return
             else:
                 new_matrix = { "profile_access_1": profile_1, "profile_access_2": profile_2 }
                 data.append(new_matrix)
@@ -378,12 +375,6 @@ class MatrizPage(tk.Frame):
             profile2 = item['profile_access_2']
             self.matrix_tree.insert('', 'end', values=(profile1, profile2))
 
-    def save_matrix(self):
-        # Adicione aqui a lógica para salvar a matriz em um arquivo xlsx
-        data = self.matrix_listbox.get(0, tk.END)
-        # Implemente a lógica de salvar os dados em um arquivo xlsx, semelhante ao que fizemos antes
-        print('Matriz Salva:', data)
-
     def create_association_list(self):
         systems_data = self.read_from_xlsx_systems()
         profiles_data = self.read_from_xlsx_profiles()
@@ -419,7 +410,6 @@ class MatrizPage(tk.Frame):
         except pd.errors.EmptyDataError:
             return {}
             
-
     def read_from_xlsx_profiles(self):
         try:
             df = pd.read_excel(self.filename_profiles, engine='openpyxl')
