@@ -40,7 +40,8 @@ hashed_passwords = {
     'admin': hash_password('admin'),
     'diretor': hash_password('60#QoUAUU>9o'),
     'professor': hash_password('/sKk_CtP=vw>05rx'),
-    'aluno': hash_password('K(&MQZJjKu<O>FT[')
+    'aluno':  hash_password('aluno'),
+    # 'aluno': hash_password('K(&MQZJjKu<O>FT[')
 }
 
 

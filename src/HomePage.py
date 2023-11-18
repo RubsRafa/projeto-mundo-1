@@ -15,47 +15,39 @@ class HomePage(tk.Tk):
         self.bar = tk.Frame(self, bg='#273746', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
 
-        options = ['Início', 'Sistemas', 'Perfis de Acesso', 'Matriz SoD']
-        for item in options:
+        self.switch_case = {
+            'admin': {
+                'Início': InicioPage,
+                'Sistemas': SistemasPage,
+                'Perfis de Acesso': PerfisPage,
+                'Matriz SoD': MatrizPage
+            },
+            'aluno': {
+                'Início': InicioPage,
+                'Sistemas': SistemasPage
+            },
+        }
+
+        self.pages = self.switch_case[self.username]
+
+        self.options = []
+        for page, _ in self.pages.items():
+            self.options.append(page)
+
+        # options = ['Início', 'Sistemas', 'Perfis de Acesso', 'Matriz SoD']
+        for item in self.options:
             self.btn = tk.Button(self.bar, text=item, command=lambda text=item: self.show_button(text), foreground='gray', bg='black', activebackground='gray', activeforeground='white', font=('Roboto', 14), borderwidth=0)
             self.btn.pack(pady=10, padx=10)
 
         self.main_content = tk.Frame(self, bg='#273746')
         self.main_content.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
 
-        self.pages = {
-            'Início': InicioPage,
-            'Sistemas': SistemasPage,
-            'Perfis de Acesso': PerfisPage,
-            'Matriz SoD': MatrizPage
-        }
-
-
-        # if username == 'admin':
-        #     self.pages = {
-        #        'Início': InicioPage,
-        #        'Sistemas': SistemasPage,
-        #        'Perfis de Acesso': PerfisPage,
-        #        'Matriz SoD': MatrizPage
-        #     }
-        # elif username == 'diretor':
-        #     self.pages = {
-        #         'Início': InicioPage,
-        #         'Sistemas': SistemasPage,
-        #         'Perfis de Acesso': PerfisPage,
-        #         'Matriz SoD': MatrizPage
-        #     }
-        # elif username == 'Professor':
-        #     self.pages = {
-        #         'Início': InicioPage,
-        #         'Sistemas': SistemasPage,
-        #         'Perfis de Acesso': PerfisPage
-        #     }
-        # else: 
-        #     self.pages = {
-        #         'Início': InicioPage,
-        #         'Sistemas': SistemasPage
-        #     }
+        # self.pages = {
+        #     'Início': InicioPage,
+        #     'Sistemas': SistemasPage,
+        #     'Perfis de Acesso': PerfisPage,
+        #     'Matriz SoD': MatrizPage
+        # }
 
         self.show_page('Início')
 
