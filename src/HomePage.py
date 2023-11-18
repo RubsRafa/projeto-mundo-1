@@ -313,7 +313,7 @@ class MatrizPage(tk.Frame):
         profile_access_1_dropdown.pack(pady=10)
 
         self.profile_access_2 = tk.StringVar(self)
-        self.profile_access_2.set(profile_2[0]) 
+        self.profile_access_2.set(profile_2[0])
         profile_access_2_dropdown = ttk.Combobox(self, textvariable=self.profile_access_2, values=profile_2)
         profile_access_2_dropdown.pack(pady=10)
 
@@ -323,9 +323,13 @@ class MatrizPage(tk.Frame):
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
 
+        save_button = tk.Button(self, text='Salvar Matriz', command=self.save_matrix)
+        save_button.pack(pady=10)
+
         self.load_data()
 
     def add_to_matrix(self):
+        
         profile_1 = self.profile_access_1.get()
         profile_2 = self.profile_access_2.get()
         if profile_1 == profile_2:
@@ -333,15 +337,16 @@ class MatrizPage(tk.Frame):
         else:
             data = self.read_from_xlsx_matriz()
             for item in data:
+                print(item)
                 item1 = item['profile_access_1']
                 item2 = item['profile_access_2']
                 if profile_1 == item1 and profile_2 == item2:
                     tkMessageBox.showerror('INVALID', 'Os perfis de acesso\njá foram traçados.')
-                else:
-                    new_matrix = { "profile_access_1": profile_1, "profile_access_2": profile_2 }
-                    data.append(new_matrix)
-                    self.write_to_xlsx_matriz(data)
-                    self.matrix_tree.insert('', 'end', values=(profile_1, profile_2))
+            else:
+                new_matrix = { "profile_access_1": profile_1, "profile_access_2": profile_2 }
+                data.append(new_matrix)
+                self.write_to_xlsx_matriz(data)
+                self.matrix_tree.insert('', 'end', values=(profile_1, profile_2))
 
     def remove_matrix(self):
         selected_item = self.matrix_tree.selection()
@@ -361,15 +366,23 @@ class MatrizPage(tk.Frame):
             tkMessageBox.showerror('NOT FOUND', 'Esse registro não\nfoi encontrado.')
     
     def load_data(self):
+        print('carregou')
         if not os.path.exists(self.filename):
             self.write_to_xlsx_matriz({})
 
         data = self.read_from_xlsx_matriz()
-
+        print(data)
         for item in data:
+            print(item)
             profile1 = item['profile_access_1']
             profile2 = item['profile_access_2']
             self.matrix_tree.insert('', 'end', values=(profile1, profile2))
+
+    def save_matrix(self):
+        # Adicione aqui a lógica para salvar a matriz em um arquivo xlsx
+        data = self.matrix_listbox.get(0, tk.END)
+        # Implemente a lógica de salvar os dados em um arquivo xlsx, semelhante ao que fizemos antes
+        print('Matriz Salva:', data)
 
     def create_association_list(self):
         systems_data = self.read_from_xlsx_systems()
