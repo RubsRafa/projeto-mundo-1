@@ -7,11 +7,11 @@ import EntryFocus as Focus
 import os
 
 class HomePage(tk.Tk):
-    def __init__(self):
+    def __init__(self, username):
         super().__init__()
         self.title('HOME PAGE')
         self.geometry('880x600')
-        # self.username = username
+        self.username = username
 
         self.bar = tk.Frame(self, bg='#273746', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
@@ -30,16 +30,7 @@ class HomePage(tk.Tk):
             },
         }
 
-        self.pages = {
-                'Início': InicioPage,
-                'Sistemas': SistemasPage,
-                'Perfis de Acesso': PerfisPage,
-                'Matriz SoD': MatrizPage,
-                'Usuários': UsuariosPage,
-                'Alunos': AlunosPage
-            }
-
-        # self.pages = self.switch_case[self.username]
+        self.pages = self.switch_case[self.username]
 
         self.options = []
         for page, _ in self.pages.items():
