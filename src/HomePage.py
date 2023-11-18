@@ -6,11 +6,11 @@ import EntryFocus as Focus
 import os
 
 class HomePage(tk.Tk):
-    def __init__(self):
+    def __init__(self, username):
         super().__init__()
         self.title('HOME PAGE')
         self.geometry('880x600')
-        # print('username', username)
+        self.username = username
 
         self.bar = tk.Frame(self, bg='#273746', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
@@ -99,6 +99,11 @@ class SistemasPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
+        # self.root = tk.Tk()
+        # self.style = ttk.Style(self.root)
+        # self.style.theme_use('clam')
+        # self.style.configure("Treeview", background='black', fieldbackground="black", foreground="white")
+
         self.columns = ('Código do Sistema', 'Nome do Sistema')
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
 
