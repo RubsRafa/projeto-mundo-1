@@ -22,6 +22,7 @@ class HomePage(tk.Tk):
                 'Sistemas': SistemasPage,
                 'Perfis de Acesso': PerfisPage,
                 'Matriz SoD': MatrizPage,
+                'Usuários': UsuariosPage,
                 'Alunos': AlunosPage
             },
             'aluno': {
