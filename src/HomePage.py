@@ -26,7 +26,6 @@ class HomePage(tk.Tk):
             },
             'aluno': {
                 'Início': InicioPage,
-                'Sistemas': SistemasPage,
                 'Alunos': AlunosPage
             },
         }
