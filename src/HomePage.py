@@ -207,22 +207,27 @@ class PerfisPage(tk.Frame):
 
         self.tree.pack(pady=20)
 
-        self.code_entry = tk.Entry(self, width=30)
+        self.code = self.create_system_list()
+        self.code_entry = tk.StringVar(self)
+        self.code_entry.set(self.code[0])
+        code_entry_dropdown = ttk.Combobox(self, textvariable=self.code_entry, values=self.code)
+        code_entry_dropdown.pack(pady=10)
+
         self.name_entry = tk.Entry(self, width=30)
         self.description_entry = tk.Entry(self, width=30)
 
-        self.code_placeholder = 'Insira o Código do Sistema'
+        # self.code_placeholder = 'Insira o Código do Sistema'
         self.name_placeholder = 'Insira o Nome do Perfil'
         self.description_placeholder = 'Insira a Descrição'
 
-        Focus.setup_entry(self.code_entry, self.code_placeholder)
+        # Focus.setup_entry(self.code_entry, self.code_placeholder)
         Focus.setup_entry(self.name_entry, self.name_placeholder)
         Focus.setup_entry(self.description_entry, self.description_placeholder)
 
         add_button = tk.Button(self, text='Adicionar', command=self.add_profile)
         remove_button = tk.Button(self, text='Remover', command=self.remove_profile)
 
-        self.code_entry.pack(pady=10)
+        # self.code_entry.pack(pady=10)
         self.name_entry.pack(pady=10)
         self.description_entry.pack(pady=10)
         add_button.pack(pady=10)
@@ -230,51 +235,47 @@ class PerfisPage(tk.Frame):
 
         self.load_data()
 
+    def create_system_list(self):
+        systems_data = self.read_from_xlsx_systems()
+
+        system_list = []
+        for _, name in systems_data.items():
+            system_list.append(name)
+        
+        return system_list
+
     def add_profile(self):
         code = self.code_entry.get()
         name = self.name_entry.get()
         description = self.description_entry.get()
-        systems = self.read_from_xlsx_systems()
+        
         data = self.read_from_xlsx_profiles()
-        try:
-            int(code)
-        except:
-            tkMessageBox.showerror('INVALID DATA', 'O código deve ser um número')
-
-        if int(code) not in systems:
-            tkMessageBox.showerror('UNAUTHORIZED', 'O código do sistema\ninserido não existe.\nInsira código de\nsistema existente.')
-        else:
-            if name == self.name_placeholder or name == '':
-                tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\num nome\npara o perfil.')
-            elif description == self.description_placeholder or description == '':
-                tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\numa descrição\npara o perfil.')
-            else: 
-                new_profile = {"code": int(code), "name": name, "description": description}
-                data.append(new_profile)
-                self.write_to_xlsx_profiles(data)
-
-                if code and name and description:
-                    values = (code, name, description)
-                    self.tree.insert('', 'end', values=values)
-                    self.code_entry.delete(0, 'end')
-                    self.name_entry.delete(0, 'end')
-                    self.description_entry.delete(0, 'end')
-                    if code == self.code_placeholder:
-                        self.code_entry.insert(0, self.code_placeholder)
-                        self.code_entry.configure(fg='grey')
-                    if name == self.name_placeholder:
-                        self.name_entry.insert(0, self.name_placeholder)
-                        self.name_entry.configure(fg='grey')
-                    if description == self.description_placeholder:
-                        self.description_entry.insert(0, self.description_placeholder)
-                        self.description_entry.configure(fg='grey')
+        if name == self.name_placeholder or name == '':
+            tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\num nome\npara o perfil.')
+        elif description == self.description_placeholder or description == '':
+            tkMessageBox.showerror('INVALID DATA', 'Você deve inserir\numa descrição\npara o perfil.')
+        else: 
+            new_profile = {"code": code, "name": name, "description": description}
+            data.append(new_profile)
+            self.write_to_xlsx_profiles(data)
+            if code and name and description:
+                values = (code, name, description)
+                self.tree.insert('', 'end', values=values)
+                self.name_entry.delete(0, 'end')
+                self.description_entry.delete(0, 'end')
+                if name == self.name_placeholder:
+                    self.name_entry.insert(0, self.name_placeholder)
+                    self.name_entry.configure(fg='grey')
+                if description == self.description_placeholder:
+                    self.description_entry.insert(0, self.description_placeholder)
+                    self.description_entry.configure(fg='grey')
 
     def remove_profile(self):
         selected_item = self.tree.selection()
 
         if selected_item:
-            code = int(self.tree.item(selected_item, 'values')[0])
-            name = str(self.tree.item(selected_item, 'values')[1])
+            code = self.tree.item(selected_item, 'values')[0]
+            name = self.tree.item(selected_item, 'values')[1]
             description = str(self.tree.item(selected_item, 'values')[2])
             
             data = self.read_from_xlsx_profiles()
@@ -292,14 +293,12 @@ class PerfisPage(tk.Frame):
         if not os.path.exists(self.filename):
             self.write_to_xlsx_profiles({})
 
-        systems = self.read_from_xlsx_systems()
         data = self.read_from_xlsx_profiles()
         for profile in data:
             code = profile['code']
             name = profile['name']
             description = profile['description']
-            system_name = systems[code]
-            self.tree.insert('', 'end', values=(f'{code} - {system_name}', name, description))
+            self.tree.insert('', 'end', values=(code, name, description))
 
     def read_from_xlsx_systems(self):
         try:
