@@ -109,7 +109,7 @@ class SistemasPage(tk.Frame):
             self.tree.heading(col, text=col)
             self.tree.column(col, anchor='center', width=160)
 
-        self.tree.pack(pady=20, expand=True)
+        self.tree.pack(expand=True)
 
         self.code_entry = tk.Entry(frame, width=30, borderwidth=0, highlightthickness=0, bg='#273746', font=('Calibri', 12), justify='center')
         self.name_entry = tk.Entry(frame, width=30, borderwidth=0, highlightthickness=0, bg='#273746', font=('Calibri', 12), justify='center')
@@ -120,8 +120,8 @@ class SistemasPage(tk.Frame):
         Focus.setup_entry(self.code_entry, self.code_placeholder)
         Focus.setup_entry(self.name_entry, self.name_placeholder)
 
-        add_button = tk.Button(frame, text='Adicionar', command=self.add_system)
-        remove_button = tk.Button(frame, text='Remover', command=self.remove_system)
+        add_button = tk.Button(frame, text='Adicionar', command=self.add_system, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
+        remove_button = tk.Button(frame, text='Remover', command=self.remove_system, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
 
         self.code_entry.pack(pady=10)
         self.name_entry.pack(pady=10)
@@ -220,7 +220,7 @@ class PerfisPage(tk.Frame):
         self.code = self.create_system_list()
         self.code_entry = tk.StringVar(self)
         self.code_entry.set(self.code[0])
-        code_entry_dropdown = ttk.Combobox(frame, textvariable=self.code_entry, values=self.code)
+        code_entry_dropdown = ttk.Combobox(frame, textvariable=self.code_entry, values=self.code, foreground='black', font=('Roboto', 14), width=15, justify='center')
         code_entry_dropdown.pack(pady=10)
 
         self.name_entry = tk.Entry(frame, width=30, borderwidth=0, highlightthickness=0, bg='#273746', font=('Calibri', 12), justify='center')
@@ -232,8 +232,8 @@ class PerfisPage(tk.Frame):
         Focus.setup_entry(self.name_entry, self.name_placeholder)
         Focus.setup_entry(self.description_entry, self.description_placeholder)
 
-        add_button = tk.Button(frame, text='Adicionar', command=self.add_profile)
-        remove_button = tk.Button(frame, text='Remover', command=self.remove_profile)
+        add_button = tk.Button(frame, text='Adicionar', command=self.add_profile, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
+        remove_button = tk.Button(frame, text='Remover', command=self.remove_profile, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
 
         self.name_entry.pack(pady=10)
         self.description_entry.pack(pady=10)
@@ -358,16 +358,16 @@ class MatrizPage(tk.Frame):
 
         self.profile_access_1 = tk.StringVar(self)
         self.profile_access_1.set(profile_1[0])
-        profile_access_1_dropdown = ttk.Combobox(frame, textvariable=self.profile_access_1, values=profile_1)
+        profile_access_1_dropdown = ttk.Combobox(frame, textvariable=self.profile_access_1, values=profile_1, foreground='black', font=('Roboto', 14), width=20, justify='center')
         profile_access_1_dropdown.pack(pady=10)
 
         self.profile_access_2 = tk.StringVar(self)
         self.profile_access_2.set(profile_2[0])
-        profile_access_2_dropdown = ttk.Combobox(frame, textvariable=self.profile_access_2, values=profile_2)
+        profile_access_2_dropdown = ttk.Combobox(frame, textvariable=self.profile_access_2, values=profile_2, foreground='black', font=('Roboto', 14), width=20, justify='center')
         profile_access_2_dropdown.pack(pady=10)
 
-        add_button = tk.Button(frame, text='Adicionar à Matriz', command=self.add_to_matrix)
-        remove_button = tk.Button(frame, text='Remover', command=self.remove_matrix)
+        add_button = tk.Button(frame, text='Adicionar à Matriz', command=self.add_to_matrix, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
+        remove_button = tk.Button(frame, text='Remover', command=self.remove_matrix, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
 
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
@@ -505,16 +505,16 @@ class UsuariosPage(tk.Frame):
 
         self.system_entry = tk.StringVar(self)
         self.system_entry.set(self.system[0])
-        system_entry_dropdown = ttk.Combobox(frame, textvariable=self.system_entry, values=self.system)
+        system_entry_dropdown = ttk.Combobox(frame, textvariable=self.system_entry, values=self.system, foreground='black', font=('Roboto', 14), width=15, justify='center')
         system_entry_dropdown.pack(pady=10)
 
         self.profile_entry = tk.StringVar(self)
         self.profile_entry.set(self.profile[0])
-        profile_entry_dropdown = ttk.Combobox(frame, textvariable=self.profile_entry, values=self.profile)
+        profile_entry_dropdown = ttk.Combobox(frame, textvariable=self.profile_entry, values=self.profile, foreground='black', font=('Roboto', 14), width=15, justify='center')
         profile_entry_dropdown.pack(pady=10)
 
-        add_button = tk.Button(frame, text='Adicionar', command=self.add_user)
-        remove_button = tk.Button(frame, text='Remover', command=self.remove_user)
+        add_button = tk.Button(frame, text='Adicionar', command=self.add_user, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
+        remove_button = tk.Button(frame, text='Remover', command=self.remove_user, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
 
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
