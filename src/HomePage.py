@@ -95,10 +95,15 @@ class SistemasPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.title = tk.Label(self, text='Cadastro de Sistemas', font=('Roboto', 16), foreground='black')
+        self.bg_color = '#17202A'
+
+        frame = tk.Frame(self, bg=self.bg_color)
+        frame.pack(expand=True, fill='both')
+
+        self.title = tk.Label(frame, text='Cadastro de Sistemas', font=('Roboto', 16), foreground='white', background=self.bg_color)
         self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Sistema')
-        self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
+        self.tree = ttk.Treeview(frame, columns=self.columns, show='headings', height=10)
 
         for col in self.columns:
             self.tree.heading(col, text=col)
@@ -106,8 +111,8 @@ class SistemasPage(tk.Frame):
 
         self.tree.pack(pady=20, expand=True)
 
-        self.code_entry = tk.Entry(self, width=30)
-        self.name_entry = tk.Entry(self, width=30)
+        self.code_entry = tk.Entry(frame, width=30)
+        self.name_entry = tk.Entry(frame, width=30)
 
         self.code_placeholder = 'Insira o Código do Sistema'
         self.name_placeholder = 'Insira o Nome do Sistema'
@@ -115,8 +120,8 @@ class SistemasPage(tk.Frame):
         Focus.setup_entry(self.code_entry, self.code_placeholder)
         Focus.setup_entry(self.name_entry, self.name_placeholder)
 
-        add_button = tk.Button(self, text='Adicionar', command=self.add_system)
-        remove_button = tk.Button(self, text='Remover', command=self.remove_system)
+        add_button = tk.Button(frame, text='Adicionar', command=self.add_system)
+        remove_button = tk.Button(frame, text='Remover', command=self.remove_system)
 
         self.code_entry.pack(pady=10)
         self.name_entry.pack(pady=10)
@@ -196,10 +201,15 @@ class PerfisPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.title = tk.Label(self, text='Cadastro de Perfis de Acesso', font=('Roboto', 16), foreground='black')
+        self.bg_color = '#17202A'
+
+        frame = tk.Frame(self, bg=self.bg_color)
+        frame.pack(expand=True, fill='both')
+
+        self.title = tk.Label(frame, text='Cadastro de Perfis de Acesso', font=('Roboto', 16), foreground='white', background=self.bg_color)
         self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Perfil', 'Descrição')
-        self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
+        self.tree = ttk.Treeview(frame, columns=self.columns, show='headings', height=10)
 
         for col in self.columns:
             self.tree.heading(col, text=col)
@@ -210,11 +220,11 @@ class PerfisPage(tk.Frame):
         self.code = self.create_system_list()
         self.code_entry = tk.StringVar(self)
         self.code_entry.set(self.code[0])
-        code_entry_dropdown = ttk.Combobox(self, textvariable=self.code_entry, values=self.code)
+        code_entry_dropdown = ttk.Combobox(frame, textvariable=self.code_entry, values=self.code)
         code_entry_dropdown.pack(pady=10)
 
-        self.name_entry = tk.Entry(self, width=30)
-        self.description_entry = tk.Entry(self, width=30)
+        self.name_entry = tk.Entry(frame, width=30)
+        self.description_entry = tk.Entry(frame, width=30)
 
         self.name_placeholder = 'Insira o Nome do Perfil'
         self.description_placeholder = 'Insira a Descrição'
@@ -222,8 +232,8 @@ class PerfisPage(tk.Frame):
         Focus.setup_entry(self.name_entry, self.name_placeholder)
         Focus.setup_entry(self.description_entry, self.description_placeholder)
 
-        add_button = tk.Button(self, text='Adicionar', command=self.add_profile)
-        remove_button = tk.Button(self, text='Remover', command=self.remove_profile)
+        add_button = tk.Button(frame, text='Adicionar', command=self.add_profile)
+        remove_button = tk.Button(frame, text='Remover', command=self.remove_profile)
 
         self.name_entry.pack(pady=10)
         self.description_entry.pack(pady=10)
@@ -327,10 +337,15 @@ class MatrizPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.title = tk.Label(self, text='Registro de Restrições', font=('Roboto', 16), foreground='black')
+        self.bg_color = '#17202A'
+
+        frame = tk.Frame(self, bg=self.bg_color)
+        frame.pack(expand=True, fill='both')
+
+        self.title = tk.Label(frame, text='Registro de Restrições', font=('Roboto', 16), foreground='white', background=self.bg_color)
         self.title.pack(padx=20, pady=20)
         self.columns = ('Perfil de Acesso 1', 'Perfil de Acesso 2')
-        self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
+        self.tree = ttk.Treeview(frame, columns=self.columns, show='headings', height=10)
 
         for col in self.columns:
             self.tree.heading(col, text=col)
@@ -343,16 +358,16 @@ class MatrizPage(tk.Frame):
 
         self.profile_access_1 = tk.StringVar(self)
         self.profile_access_1.set(profile_1[0])
-        profile_access_1_dropdown = ttk.Combobox(self, textvariable=self.profile_access_1, values=profile_1)
+        profile_access_1_dropdown = ttk.Combobox(frame, textvariable=self.profile_access_1, values=profile_1)
         profile_access_1_dropdown.pack(pady=10)
 
         self.profile_access_2 = tk.StringVar(self)
         self.profile_access_2.set(profile_2[0])
-        profile_access_2_dropdown = ttk.Combobox(self, textvariable=self.profile_access_2, values=profile_2)
+        profile_access_2_dropdown = ttk.Combobox(frame, textvariable=self.profile_access_2, values=profile_2)
         profile_access_2_dropdown.pack(pady=10)
 
-        add_button = tk.Button(self, text='Adicionar à Matriz', command=self.add_to_matrix)
-        remove_button = tk.Button(self, text='Remover', command=self.remove_matrix)
+        add_button = tk.Button(frame, text='Adicionar à Matriz', command=self.add_to_matrix)
+        remove_button = tk.Button(frame, text='Remover', command=self.remove_matrix)
 
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
@@ -461,10 +476,16 @@ class UsuariosPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.title = tk.Label(self, text='Cadastro de Perfis dos Usuários', font=('Roboto', 16), foreground='black')
+        self.bg_color = '#17202A'
+
+        frame = tk.Frame(self, bg=self.bg_color)
+        frame.pack(expand=True, fill='both')
+
+        self.title = tk.Label(frame, text='Cadastro de Perfis dos Usuários', font=('Roboto', 16), foreground='white', background=self.bg_color)
         self.title.pack(padx=20, pady=20)
+        
         self.columns = ('CPF', 'Código do Sistema', 'Nome do Perfil')
-        self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
+        self.tree = ttk.Treeview(frame, columns=self.columns, show='headings', height=10)
 
         for col in self.columns:
             self.tree.heading(col, text=col)
@@ -474,7 +495,7 @@ class UsuariosPage(tk.Frame):
 
         self.cpf_var = tk.StringVar()
 
-        self.cpf_entry = tk.Entry(self, width=30)
+        self.cpf_entry = tk.Entry(frame, width=30)
         self.cpf_placeholder = 'Insira o CPF do Usuário'
         Focus.setup_entry(self.cpf_entry, self.cpf_placeholder)
         self.cpf_entry.pack(pady=10)
@@ -484,16 +505,16 @@ class UsuariosPage(tk.Frame):
 
         self.system_entry = tk.StringVar(self)
         self.system_entry.set(self.system[0])
-        system_entry_dropdown = ttk.Combobox(self, textvariable=self.system_entry, values=self.system)
+        system_entry_dropdown = ttk.Combobox(frame, textvariable=self.system_entry, values=self.system)
         system_entry_dropdown.pack(pady=10)
 
         self.profile_entry = tk.StringVar(self)
         self.profile_entry.set(self.profile[0])
-        profile_entry_dropdown = ttk.Combobox(self, textvariable=self.profile_entry, values=self.profile)
+        profile_entry_dropdown = ttk.Combobox(frame, textvariable=self.profile_entry, values=self.profile)
         profile_entry_dropdown.pack(pady=10)
 
-        add_button = tk.Button(self, text='Adicionar', command=self.add_user)
-        remove_button = tk.Button(self, text='Remover', command=self.remove_user)
+        add_button = tk.Button(frame, text='Adicionar', command=self.add_user)
+        remove_button = tk.Button(frame, text='Remover', command=self.remove_user)
 
         add_button.pack(pady=10)
         remove_button.pack(pady=10)
