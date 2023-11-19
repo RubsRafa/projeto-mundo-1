@@ -142,6 +142,7 @@ class SistemasPage(tk.Frame):
 
         if int(code) in data:
             tkMessageBox.showerror('UNAUTHORIZED', 'O código inserido já existe.\nInsira outro código.')
+            return
         else:
             data[int(code)] = name
             if name == self.name_placeholder or name == '':
