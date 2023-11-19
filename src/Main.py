@@ -37,7 +37,6 @@ class Main():
     
     def login(self):
         self.username = self.login_entry.get()
-        print(self.username)
         verifyUser = Auth.authenticateUser(self.login_entry.get(), self.password_entry.get())
         if verifyUser == True:
             self.login_window.destroy()

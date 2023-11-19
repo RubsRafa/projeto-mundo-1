@@ -1,6 +1,5 @@
 import tkinter as tk
 from tkinter import ttk
-from PIL import Image, ImageTk
 import tkinter.messagebox as tkMessageBox
 import pandas as pd
 import EntryFocus as Focus
@@ -87,11 +86,6 @@ class SistemasPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        # self.root = tk.Tk()
-        # self.style = ttk.Style(self.root)
-        # self.style.theme_use('clam')
-        # self.style.configure("Treeview", background='black', fieldbackground="black", foreground="white")
-
         self.title = tk.Label(self, text='Cadastro e registro de sistemas', font=('Roboto', 16), foreground='black')
         self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Sistema')
