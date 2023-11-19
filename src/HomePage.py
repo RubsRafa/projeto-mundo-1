@@ -102,9 +102,9 @@ class SistemasPage(tk.Frame):
 
         for col in self.columns:
             self.tree.heading(col, text=col)
-            self.tree.column(col, width=150)
+            self.tree.column(col, anchor='center', width=160)
 
-        self.tree.pack(pady=20)
+        self.tree.pack(pady=20, expand=True)
 
         self.code_entry = tk.Entry(self, width=30)
         self.name_entry = tk.Entry(self, width=30)
@@ -203,9 +203,9 @@ class PerfisPage(tk.Frame):
 
         for col in self.columns:
             self.tree.heading(col, text=col)
-            self.tree.column(col, width=150)
+            self.tree.column(col, anchor='center', width=150)
 
-        self.tree.pack(pady=20)
+        self.tree.pack(pady=20, expand=True)
 
         self.code = self.create_system_list()
         self.code_entry = tk.StringVar(self)
@@ -216,18 +216,15 @@ class PerfisPage(tk.Frame):
         self.name_entry = tk.Entry(self, width=30)
         self.description_entry = tk.Entry(self, width=30)
 
-        # self.code_placeholder = 'Insira o Código do Sistema'
         self.name_placeholder = 'Insira o Nome do Perfil'
         self.description_placeholder = 'Insira a Descrição'
 
-        # Focus.setup_entry(self.code_entry, self.code_placeholder)
         Focus.setup_entry(self.name_entry, self.name_placeholder)
         Focus.setup_entry(self.description_entry, self.description_placeholder)
 
         add_button = tk.Button(self, text='Adicionar', command=self.add_profile)
         remove_button = tk.Button(self, text='Remover', command=self.remove_profile)
 
-        # self.code_entry.pack(pady=10)
         self.name_entry.pack(pady=10)
         self.description_entry.pack(pady=10)
         add_button.pack(pady=10)
@@ -337,8 +334,9 @@ class MatrizPage(tk.Frame):
 
         for col in self.columns:
             self.tree.heading(col, text=col)
-            self.tree.column(col, width=180)
-        self.tree.pack(pady=20)
+            self.tree.column(col, anchor='center', width=180)
+
+        self.tree.pack(pady=20, expand=True)
 
         profile_1 = self.create_association_list()
         profile_2 = self.create_association_list()
@@ -470,8 +468,9 @@ class UsuariosPage(tk.Frame):
 
         for col in self.columns:
             self.tree.heading(col, text=col)
-            self.tree.column(col, width=180)
-        self.tree.pack(pady=20)
+            self.tree.column(col, anchor='center', width=180)
+
+        self.tree.pack(pady=20, expand=True)
 
         self.cpf_var = tk.StringVar()
 
