@@ -27,10 +27,13 @@ class Main():
         self.password_entry.grid(row=2, column=2, padx=10, pady=10, sticky="w")
         
         login_button = tk.Button(self.login_window, text="Login", command=self.login, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
-        login_button.grid(row=3, column=1, columnspan=2, pady=30)
+        login_button.grid(row=3, column=1, columnspan=2, pady=20)
 
         alunos_button = tk.Button(self.login_window, text="Alunos", command=self.alunos, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
-        alunos_button.grid(row=4, column=1, columnspan=2, pady=10)
+        alunos_button.grid(row=4, column=1, columnspan=2, pady=20)
+
+        exit_button = tk.Button(self.login_window, text="Sair", command=self.exit, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
+        exit_button.grid(row=5, column=1, columnspan=2, pady=20)
         
         self.login_window.mainloop()
 
@@ -49,6 +52,9 @@ class Main():
     def alunos(self):
         self.login_window.destroy()
         Alunos.Alunos()
+    
+    def exit(self):
+        self.login_window.destroy()
         
 
         
