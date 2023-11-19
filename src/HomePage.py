@@ -6,11 +6,11 @@ import EntryFocus as Focus
 import os
 
 class HomePage(tk.Tk):
-    def __init__(self, username):
+    def __init__(self):
         super().__init__()
         self.title('HOME PAGE')
         self.geometry('880x600')
-        self.username = username
+        # self.username = username
 
         self.bar = tk.Frame(self, bg='#273746', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
@@ -30,7 +30,16 @@ class HomePage(tk.Tk):
             },
         }
 
-        self.pages = self.switch_case[self.username]
+        # self.pages = self.switch_case[self.username]
+
+        self.pages = {
+                'Início': InicioPage,
+                'Sistemas': SistemasPage,
+                'Perfis de Acesso': PerfisPage,
+                'Matriz SoD': MatrizPage,
+                'Usuários': UsuariosPage,
+                'Alunos': AlunosPage
+            }
 
         self.options = []
         for page, _ in self.pages.items():
@@ -102,7 +111,7 @@ class SistemasPage(tk.Frame):
 
         self.tree.pack(pady=20, expand=True)
 
-        self.code_entry = tk.Entry(frame, width=30)
+        self.code_entry = tk.Entry(frame, width=30, borderwidth=0, highlightthickness=0, bg='#273746', font=('Calibri', 12), justify='center')
         self.name_entry = tk.Entry(frame, width=30)
 
         self.code_placeholder = 'Insira o Código do Sistema'
@@ -145,10 +154,10 @@ class SistemasPage(tk.Frame):
                     self.name_entry.delete(0, 'end')
                     if code == self.code_placeholder:
                         self.code_entry.insert(0, self.code_placeholder)
-                        self.code_entry.configure(fg='grey')
+                        self.code_entry.configure(fg='#ABB2B9')
                     if name == self.name_placeholder:
                         self.name_entry.insert(0, self.name_placeholder)
-                        self.name_entry.configure(fg='grey')
+                        self.name_entry.configure(fg='#ABB2B9')
 
     def remove_system(self):
         selected_item = self.tree.selection()
@@ -263,10 +272,10 @@ class PerfisPage(tk.Frame):
                 self.description_entry.delete(0, 'end')
                 if name == self.name_placeholder:
                     self.name_entry.insert(0, self.name_placeholder)
-                    self.name_entry.configure(fg='grey')
+                    self.name_entry.configure(fg='#ABB2B9')
                 if description == self.description_placeholder:
                     self.description_entry.insert(0, self.description_placeholder)
-                    self.description_entry.configure(fg='grey')
+                    self.description_entry.configure(fg='#ABB2B9')
 
     def remove_profile(self):
         selected_item = self.tree.selection()
@@ -535,7 +544,7 @@ class UsuariosPage(tk.Frame):
                 self.cpf_entry.delete(0, 'end')
                 if self.cpf_entry == self.cpf_placeholder:
                     self.cpf_entry.insert(0, self.cpf_placeholder)
-                    self.cpf_entry.configure(fg='grey')
+                    self.cpf_entry.configure(fg='#ABB2B9')
 
     def remove_user(self):
         selected_item = self.tree.selection()
