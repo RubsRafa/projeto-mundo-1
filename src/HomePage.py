@@ -112,7 +112,7 @@ class SistemasPage(tk.Frame):
         self.tree.pack(pady=20, expand=True)
 
         self.code_entry = tk.Entry(frame, width=30, borderwidth=0, highlightthickness=0, bg='#273746', font=('Calibri', 12), justify='center')
-        self.name_entry = tk.Entry(frame, width=30)
+        self.name_entry = tk.Entry(frame, width=30, borderwidth=0, highlightthickness=0, bg='#273746', font=('Calibri', 12), justify='center')
 
         self.code_placeholder = 'Insira o Código do Sistema'
         self.name_placeholder = 'Insira o Nome do Sistema'
@@ -223,8 +223,8 @@ class PerfisPage(tk.Frame):
         code_entry_dropdown = ttk.Combobox(frame, textvariable=self.code_entry, values=self.code)
         code_entry_dropdown.pack(pady=10)
 
-        self.name_entry = tk.Entry(frame, width=30)
-        self.description_entry = tk.Entry(frame, width=30)
+        self.name_entry = tk.Entry(frame, width=30, borderwidth=0, highlightthickness=0, bg='#273746', font=('Calibri', 12), justify='center')
+        self.description_entry = tk.Entry(frame, width=30, borderwidth=0, highlightthickness=0, bg='#273746', font=('Calibri', 12), justify='center')
 
         self.name_placeholder = 'Insira o Nome do Perfil'
         self.description_placeholder = 'Insira a Descrição'
@@ -495,7 +495,7 @@ class UsuariosPage(tk.Frame):
 
         self.cpf_var = tk.StringVar()
 
-        self.cpf_entry = tk.Entry(frame, width=30)
+        self.cpf_entry = tk.Entry(frame, width=30, borderwidth=0, highlightthickness=0, bg='#273746', font=('Calibri', 12), justify='center')
         self.cpf_placeholder = 'Insira o CPF do Usuário'
         Focus.setup_entry(self.cpf_entry, self.cpf_placeholder)
         self.cpf_entry.pack(pady=10)
