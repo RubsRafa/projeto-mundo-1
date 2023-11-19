@@ -6,47 +6,38 @@ import EntryFocus as Focus
 import os
 
 class HomePage(tk.Tk):
-    def __init__(self):
+    def __init__(self, username):
         super().__init__()
         self.title('HOME PAGE')
         self.geometry('880x600')
-        # self.username = username
+        self.username = username
 
         self.bar = tk.Frame(self, bg='#273746', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
 
-        # self.switch_case = {
-        #     'admin': {
-        #         'Início': InicioPage,
-        #         'Sistemas': SistemasPage,
-        #         'Perfis de Acesso': PerfisPage,
-        #         'Matriz SoD': MatrizPage,
-        #         'Usuários': UsuariosPage,
-        #         'Alunos': AlunosPage
-        #     },
-        #     'aluno': {
-        #         'Início': InicioPage,
-        #         'Alunos': AlunosPage
-        #     },
-        # }
-
-        # self.pages = self.switch_case[self.username]
-
-        self.pages = {
+        self.switch_case = {
+            'admin': {
                 'Início': InicioPage,
                 'Sistemas': SistemasPage,
                 'Perfis de Acesso': PerfisPage,
                 'Matriz SoD': MatrizPage,
                 'Usuários': UsuariosPage,
                 'Alunos': AlunosPage
-            }
+            },
+            'aluno': {
+                'Início': InicioPage,
+                'Alunos': AlunosPage
+            },
+        }
+
+        self.pages = self.switch_case[self.username]
 
         self.options = []
         for page, _ in self.pages.items():
             self.options.append(page)
 
         for item in self.options:
-            self.btn = tk.Button(self.bar, text=item, command=lambda text=item: self.show_button(text), foreground='gray', bg='black', activebackground='gray', activeforeground='white', font=('Roboto', 14), borderwidth=0)
+            self.btn = tk.Button(self.bar, text=item, command=lambda text=item: self.show_button(text), foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
             self.btn.pack(pady=10, padx=10)
 
         self.main_content = tk.Frame(self, bg='#273746')
@@ -79,7 +70,7 @@ class InicioPage(tk.Frame):
             )
         self.color = '#17202A'
 
-        title_label = tk.Label(self, text=self.title, font=('Roboto', 17), foreground='white', bg=self.color)
+        title_label = tk.Label(self, text=self.title, font=('Roboto', 17), foreground='#48C9B0', bg=self.color)
         title_label.pack(padx=20, pady=20)
 
         self.configure(bg=self.color)
@@ -100,7 +91,7 @@ class SistemasPage(tk.Frame):
         frame = tk.Frame(self, bg=self.bg_color)
         frame.pack(expand=True, fill='both')
 
-        self.title = tk.Label(frame, text='Cadastro de Sistemas', font=('Roboto', 16), foreground='white', background=self.bg_color)
+        self.title = tk.Label(frame, text='Cadastro de Sistemas', font=('Roboto', 16), foreground='#48C9B0', background=self.bg_color)
         self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Sistema')
         self.tree = ttk.Treeview(frame, columns=self.columns, show='headings', height=10)
@@ -206,7 +197,7 @@ class PerfisPage(tk.Frame):
         frame = tk.Frame(self, bg=self.bg_color)
         frame.pack(expand=True, fill='both')
 
-        self.title = tk.Label(frame, text='Cadastro de Perfis de Acesso', font=('Roboto', 16), foreground='white', background=self.bg_color)
+        self.title = tk.Label(frame, text='Cadastro de Perfis de Acesso', font=('Roboto', 16), foreground='#48C9B0', background=self.bg_color)
         self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Perfil', 'Descrição')
         self.tree = ttk.Treeview(frame, columns=self.columns, show='headings', height=10)
@@ -342,7 +333,7 @@ class MatrizPage(tk.Frame):
         frame = tk.Frame(self, bg=self.bg_color)
         frame.pack(expand=True, fill='both')
 
-        self.title = tk.Label(frame, text='Registro de Restrições', font=('Roboto', 16), foreground='white', background=self.bg_color)
+        self.title = tk.Label(frame, text='Registro de Restrições', font=('Roboto', 16), foreground='#48C9B0', background=self.bg_color)
         self.title.pack(padx=20, pady=20)
         self.columns = ('Perfil de Acesso 1', 'Perfil de Acesso 2')
         self.tree = ttk.Treeview(frame, columns=self.columns, show='headings', height=10)
@@ -481,7 +472,7 @@ class UsuariosPage(tk.Frame):
         frame = tk.Frame(self, bg=self.bg_color)
         frame.pack(expand=True, fill='both')
 
-        self.title = tk.Label(frame, text='Cadastro de Perfis dos Usuários', font=('Roboto', 16), foreground='white', background=self.bg_color)
+        self.title = tk.Label(frame, text='Cadastro de Perfis dos Usuários', font=('Roboto', 16), foreground='#48C9B0', background=self.bg_color)
         self.title.pack(padx=20, pady=20)
         
         self.columns = ('CPF', 'Código do Sistema', 'Nome do Perfil')
@@ -638,7 +629,7 @@ class AlunosPage(tk.Frame):
         self.title = ('Alunos - Grupo 19')
         self.color = '#17202A'
 
-        title_label = tk.Label(self, text=self.title, font=('Roboto', 17), foreground='white', bg=self.color)
+        title_label = tk.Label(self, text=self.title, font=('Roboto', 17), foreground='#48C9B0', bg=self.color)
         title_label.pack(padx=20, pady=20)
 
         self.configure(bg=self.color)

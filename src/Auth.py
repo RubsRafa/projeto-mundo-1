@@ -19,7 +19,7 @@ def authenticateUser(user, password):
         else:
             tkMessageBox.showerror('UNAUTHORIZED', 'Usuário ou senha incorretos')
     else:
-        tkMessageBox.showerror('NOT FOUND', 'Usuário não encontrado.')
+        return False
     
     return False
 
