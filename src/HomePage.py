@@ -4,13 +4,14 @@ import tkinter.messagebox as tkMessageBox
 import pandas as pd
 import EntryFocus as Focus
 import os
+import Main as Main
 
 class HomePage(tk.Tk):
-    def __init__(self):
+    def __init__(self, username):
         super().__init__()
         self.title('HOME PAGE')
         self.geometry('880x600')
-        # self.username = username
+        self.username = username
 
         self.bar = tk.Frame(self, bg='#273746', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
@@ -22,7 +23,7 @@ class HomePage(tk.Tk):
                 'Perfis de Acesso': PerfisPage,
                 'Matriz SoD': MatrizPage,
                 'Usuários': UsuariosPage,
-                'Alunos': AlunosPage
+                'Alunos': AlunosPage,
             },
             'aluno': {
                 'Início': InicioPage,
@@ -30,16 +31,7 @@ class HomePage(tk.Tk):
             },
         }
 
-        # self.pages = self.switch_case[self.username]
-
-        self.pages = {
-                'Início': InicioPage,
-                'Sistemas': SistemasPage,
-                'Perfis de Acesso': PerfisPage,
-                'Matriz SoD': MatrizPage,
-                'Usuários': UsuariosPage,
-                'Alunos': AlunosPage
-            }
+        self.pages = self.switch_case[self.username]
 
         self.options = []
         for page, _ in self.pages.items():
@@ -51,6 +43,9 @@ class HomePage(tk.Tk):
 
         self.main_content = tk.Frame(self, bg='#273746')
         self.main_content.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+
+        self.back_button = tk.Button(self.bar, text='Log Out', command=self.back_to_login, foreground='#48C9B0', bg='#273746', activebackground='#2C3E50', activeforeground='white', font=('Roboto', 14), borderwidth=0, highlightthickness=0, width=15)
+        self.back_button.pack(pady=10, padx=10)
 
 
         self.show_page('Início')
@@ -66,6 +61,11 @@ class HomePage(tk.Tk):
                     self.main_content.destroy()
                 self.main_content = page
                 self.main_content.pack(side=tk.RIGHT, fill=tk.BOTH, expand=True)
+            
+    def back_to_login(self):
+        self.destroy()
+        Main.Main()
+
 
 
 class InicioPage(tk.Frame):
