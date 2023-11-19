@@ -6,31 +6,40 @@ import EntryFocus as Focus
 import os
 
 class HomePage(tk.Tk):
-    def __init__(self, username):
+    def __init__(self):
         super().__init__()
         self.title('HOME PAGE')
         self.geometry('880x600')
-        self.username = username
+        # self.username = username
 
         self.bar = tk.Frame(self, bg='#273746', width=200)
         self.bar.pack(side=tk.LEFT, fill=tk.Y)
 
-        self.switch_case = {
-            'admin': {
+        # self.switch_case = {
+        #     'admin': {
+        #         'Início': InicioPage,
+        #         'Sistemas': SistemasPage,
+        #         'Perfis de Acesso': PerfisPage,
+        #         'Matriz SoD': MatrizPage,
+        #         'Usuários': UsuariosPage,
+        #         'Alunos': AlunosPage
+        #     },
+        #     'aluno': {
+        #         'Início': InicioPage,
+        #         'Alunos': AlunosPage
+        #     },
+        # }
+
+        # self.pages = self.switch_case[self.username]
+
+        self.pages = {
                 'Início': InicioPage,
                 'Sistemas': SistemasPage,
                 'Perfis de Acesso': PerfisPage,
                 'Matriz SoD': MatrizPage,
                 'Usuários': UsuariosPage,
                 'Alunos': AlunosPage
-            },
-            'aluno': {
-                'Início': InicioPage,
-                'Alunos': AlunosPage
-            },
-        }
-
-        self.pages = self.switch_case[self.username]
+            }
 
         self.options = []
         for page, _ in self.pages.items():
@@ -86,7 +95,7 @@ class SistemasPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.title = tk.Label(self, text='Cadastro e registro de sistemas', font=('Roboto', 16), foreground='black')
+        self.title = tk.Label(self, text='Cadastro de Sistemas', font=('Roboto', 16), foreground='black')
         self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Sistema')
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
@@ -187,7 +196,7 @@ class PerfisPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.title = tk.Label(self, text='Cadastro de perfis de acesso', font=('Roboto', 16), foreground='black')
+        self.title = tk.Label(self, text='Cadastro de Perfis de Acesso', font=('Roboto', 16), foreground='black')
         self.title.pack(padx=20, pady=20)
         self.columns = ('Código do Sistema', 'Nome do Perfil', 'Descrição')
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
@@ -322,7 +331,7 @@ class MatrizPage(tk.Frame):
         self.create_widgets()
 
     def create_widgets(self):
-        self.title = tk.Label(self, text='Registro de restrições', font=('Roboto', 16), foreground='black')
+        self.title = tk.Label(self, text='Registro de Restrições', font=('Roboto', 16), foreground='black')
         self.title.pack(padx=20, pady=20)
         self.columns = ('Perfil de Acesso 1', 'Perfil de Acesso 2')
         self.tree = ttk.Treeview(self, columns=self.columns, show='headings', height=10)
@@ -467,8 +476,7 @@ class UsuariosPage(tk.Frame):
 
         self.cpf_var = tk.StringVar()
 
-        self.cpf_entry = tk.Entry(self, textvariable=self.cpf_var, validate='key', width=30)
-        self.cpf_entry.config(validatecommand=(self.register(self.validate_cpf), '%P'))
+        self.cpf_entry = tk.Entry(self, width=30)
         self.cpf_placeholder = 'Insira o CPF do Usuário'
         Focus.setup_entry(self.cpf_entry, self.cpf_placeholder)
         self.cpf_entry.pack(pady=10)
@@ -494,12 +502,6 @@ class UsuariosPage(tk.Frame):
 
         self.load_data()
     
-    def validate_cpf(self, new_value):
-        if new_value.isdigit() or new_value == '':
-            if len(new_value) <= 11:
-                return True
-        return False
-
 
     def add_user(self):
         cpf = self.cpf_entry.get()
