@@ -34,7 +34,3 @@ Assista ao vídeo de demonstração no [YouTube](https://www.youtube.com/watch?v
 
 - Roberta Coutinho Paes - Matrícula 202307274356
 - Rubia Rafaela Nascimento Hilario - Matrícula 202003423769
-- Ramon Santos Cerqueira - Matrícula 202303875487
-- Roger Souza Funaki - Matrícula 202301156092
-- Sara Suely Cavalcante de Souza - Matrícula 20230717735
-- Thiago Rodrigo Balão - Matrícula 202308210793
