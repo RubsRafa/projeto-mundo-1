@@ -28,7 +28,7 @@ git clone https://github.com/RubsRafa/projeto-mundo-1.git
 
 ## Vídeo Demonstrativo
 
-Assista ao vídeo de demonstração no [YouTube](https://www.youtube.com/watch?v=wYv_81VNJoQ).
+Assista ao vídeo de demonstração no [YouTube](https://www.youtube.com/watch?v=wYv_81VNJoQ&t=4s).
 
 ## Grupo 19
 
